@@ -1,0 +1,25 @@
+{
+  "name": "mandatory",
+  "version": "1.0.0",
+  "description": "node",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steffen25/SI_DLS_Mandatory1.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "ST & TFA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steffen25/SI_DLS_Mandatory1/issues"
+  },
+  "homepage": "https://github.com/steffen25/SI_DLS_Mandatory1#readme",
+  "dependencies": {
+    "express": "^4.14.1"
+  }
+}
