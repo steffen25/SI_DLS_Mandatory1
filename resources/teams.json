@@ -1,0 +1,54 @@
+{
+  "teams": [
+    {
+      "id": 1,
+      "name": "Moran Evans",
+      "teamId": 1
+    },
+    {
+      "id": 2,
+      "name": "Grace Hogan",
+      "teamId": 2
+    },
+    {
+      "id": 3,
+      "name": "Hollie Neal",
+      "teamId": 3
+    },
+    {
+      "id": 4,
+      "name": "Ebony Mccoy",
+      "teamId": 4
+    },
+    {
+      "id": 5,
+      "name": "Vega Garcia",
+      "teamId": 5
+    },
+    {
+      "id": 6,
+      "name": "Robertson Cooke",
+      "teamId": 6
+    },
+    {
+      "id": 7,
+      "name": "Ollie Mcgowan",
+      "teamId": 7
+    },
+    {
+      "id": 8,
+      "name": "Delaney Cannon",
+      "teamId": 8
+    },
+    {
+      "id": 9,
+      "name": "Bernice Sharpe",
+      "teamId": 9
+    },
+    {
+      "id": 10,
+      "name": "Darcy Crane",
+      "teamId": 10
+    }
+  ]
+}
