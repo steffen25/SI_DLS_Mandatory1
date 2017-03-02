@@ -1,5 +1,4 @@
-{
-  "users": [
+[
     {
       "id": 1,
       "name": "Livingston Lindsey",
@@ -100,5 +99,4 @@
       "registered": "2014-05-26T07:22:36 -02:00",
       "teamId": 10
     }
-  ]
-}
+]

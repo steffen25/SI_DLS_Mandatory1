@@ -1,5 +1,4 @@
-{
-  "teams": [
+[
     {
       "id": 1,
       "name": "Moran Evans",
@@ -50,5 +49,4 @@
       "name": "Darcy Crane",
       "teamId": 10
     }
-  ]
-}
+]

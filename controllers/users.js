@@ -13,13 +13,13 @@ module.exports.findUsers = function (callback) {
 module.exports.findUser = function (userId, callback) {
 
     fs.readFile('./resources/users.json', 'utf8', function (err, data) {
-        console.log(userId);
         if (err) throw err; // we'll not consider error handling for now
-        var users = JSON.parse(data).users;
+        var users = JSON.parse(data);
         if (users[userId-1] != null) {
             callback(null, users[userId-1])
+        } else {
+            callback("User not found", null)
         }
-        callback("User not found", null)
     });
     // Instead of this, run through json document and return user with specific i
 }

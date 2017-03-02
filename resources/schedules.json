@@ -1,5 +1,4 @@
-{
-  "schedules": [
+[
     {
       "id": 1,
       "monday": "eu eiusmod aliqua mollit qui amet Lorem dolor aliqua ipsum",
@@ -80,5 +79,4 @@
       "thursday": "velit exercitation aute do aliqua eu occaecat dolore amet deserunt",
       "friday": "occaecat incididunt nisi ad id duis consectetur occaecat qui mollit"
     }
-  ]
-}
+]
