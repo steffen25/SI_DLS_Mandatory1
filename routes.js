@@ -34,14 +34,13 @@ app.get('/users', function (req, res) {
 app.get('/users/:id', function (req, res) {
 
     var id = req.params.id;
-    
+
     users.findUser(id, function (err, user) {
-
-        if (user != null) {
-            res.status(200).send(user);
+        if (err) {
+            res.json({error: 'User not found'});
         }
-        else console.log('No user');
 
+        res.json(user)
     })
 })
 
