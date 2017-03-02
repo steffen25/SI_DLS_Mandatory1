@@ -1,27 +1,25 @@
+var fs = require('fs');
+
 module.exports.findSchedules = function (callback) {
-
-    // Instead of this, run through json document and return all schedules
-    var schedules = {
-        monday: "SI",
-        tuesday: "DLS",
-        wednesday: "Android",
-        thursday: "Android",
-        friday: "Fridag"
-    }
-
-    callback(null, schedules)
+    
+    fs.readFile('./resources/schedules.json', 'utf8', function (err, data) {
+        if (err) throw err; // we'll not consider error handling for now
+        var schedule = JSON.parse(data);
+        callback(null, schedule)
+    });
 }
 
 // Find one specific user by id.
 module.exports.findSchedule = function (scheduleId, callback) {
 
-    // Instead of this, run through json document and return schedule with specific id
-
-    var schedule = {
-        id: 1,
-        name: "Dette er et skema"
-    }
-
-    callback(null, schedule)
+    fs.readFile('./resources/schedules.json', 'utf8', function (err, data) {
+        if (err) throw err; // we'll not consider error handling for now
+        var schedules = JSON.parse(data);
+        if (schedules[scheduleId-1] != null) {
+            callback(null, schedules[scheduleId-1])
+        } else {
+            callback("Schedule not found", null)
+        }
+    });
 
 }
