@@ -1,0 +1,238 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Craft Jackson",
+      "age": 35,
+      "gender": "male",
+      "email": "craftjackson@speedbolt.com",
+      "phone": "+1 (836) 495-2474",
+      "registered": "2016-06-05T10:20:17 -02:00",
+      "teamId": 1
+    },
+    {
+      "id": 2,
+      "name": "Simon Mcintyre",
+      "age": 21,
+      "gender": "male",
+      "email": "simonmcintyre@speedbolt.com",
+      "phone": "+1 (990) 407-3385",
+      "registered": "2016-06-25T12:35:43 -02:00",
+      "teamId": 2
+    },
+    {
+      "id": 3,
+      "name": "Maura Wolf",
+      "age": 28,
+      "gender": "female",
+      "email": "maurawolf@speedbolt.com",
+      "phone": "+1 (916) 578-2937",
+      "registered": "2016-07-01T11:36:15 -02:00",
+      "teamId": 3
+    },
+    {
+      "id": 4,
+      "name": "Lamb Mays",
+      "age": 35,
+      "gender": "male",
+      "email": "lambmays@speedbolt.com",
+      "phone": "+1 (978) 534-2452",
+      "registered": "2014-06-12T01:12:48 -02:00",
+      "teamId": 4
+    },
+    {
+      "id": 5,
+      "name": "Galloway Black",
+      "age": 37,
+      "gender": "male",
+      "email": "gallowayblack@speedbolt.com",
+      "phone": "+1 (839) 568-2479",
+      "registered": "2014-01-27T06:10:52 -01:00",
+      "teamId": 5
+    },
+    {
+      "id": 6,
+      "name": "Robinson Henderson",
+      "age": 36,
+      "gender": "male",
+      "email": "robinsonhenderson@speedbolt.com",
+      "phone": "+1 (978) 495-2616",
+      "registered": "2015-06-11T04:11:00 -02:00",
+      "teamId": 6
+    },
+    {
+      "id": 7,
+      "name": "Mueller Mcclure",
+      "age": 20,
+      "gender": "male",
+      "email": "muellermcclure@speedbolt.com",
+      "phone": "+1 (997) 520-3363",
+      "registered": "2017-02-01T01:09:08 -01:00",
+      "teamId": 7
+    },
+    {
+      "id": 8,
+      "name": "Shirley Mack",
+      "age": 30,
+      "gender": "female",
+      "email": "shirleymack@speedbolt.com",
+      "phone": "+1 (985) 563-3622",
+      "registered": "2014-07-04T04:08:39 -02:00",
+      "teamId": 8
+    },
+    {
+      "id": 9,
+      "name": "Dudley Charles",
+      "age": 38,
+      "gender": "male",
+      "email": "dudleycharles@speedbolt.com",
+      "phone": "+1 (940) 516-2407",
+      "registered": "2016-06-01T08:21:04 -02:00",
+      "teamId": 9
+    },
+    {
+      "id": 10,
+      "name": "Diana Welch",
+      "age": 21,
+      "gender": "female",
+      "email": "dianawelch@speedbolt.com",
+      "phone": "+1 (859) 589-2465",
+      "registered": "2014-09-26T09:25:16 -02:00",
+      "teamId": 10
+    }
+  ],
+  "teams": [
+    {
+      "id": 1,
+      "name": "Weeks Harmon",
+      "teamId": 1
+    },
+    {
+      "id": 2,
+      "name": "Elliott Stokes",
+      "teamId": 2
+    },
+    {
+      "id": 3,
+      "name": "Dillon Manning",
+      "teamId": 3
+    },
+    {
+      "id": 4,
+      "name": "Reynolds Mclaughlin",
+      "teamId": 4
+    },
+    {
+      "id": 5,
+      "name": "Vaughan Cunningham",
+      "teamId": 5
+    },
+    {
+      "id": 6,
+      "name": "Benjamin Cross",
+      "teamId": 6
+    },
+    {
+      "id": 7,
+      "name": "Bartlett Mcneil",
+      "teamId": 7
+    },
+    {
+      "id": 8,
+      "name": "Trudy Riggs",
+      "teamId": 8
+    },
+    {
+      "id": 9,
+      "name": "Elisa Reeves",
+      "teamId": 9
+    },
+    {
+      "id": 10,
+      "name": "Marlene Davidson",
+      "teamId": 10
+    }
+  ],
+  "schedules": [
+    {
+      "id": 1,
+      "monday": "minim duis amet magna velit commodo occaecat occaecat ad et",
+      "tuesday": "exercitation nulla excepteur consequat velit officia aliquip voluptate quis excepteur",
+      "wednesday": "consequat consectetur quis cillum anim nisi magna ad occaecat commodo",
+      "thursday": "incididunt aute magna excepteur sint consequat et officia elit veniam",
+      "friday": "culpa excepteur dolore elit labore duis pariatur ea in voluptate"
+    },
+    {
+      "id": 2,
+      "monday": "mollit nostrud Lorem consequat cupidatat quis Lorem consectetur consequat reprehenderit",
+      "tuesday": "eiusmod veniam consequat sit cupidatat in sunt veniam veniam sit",
+      "wednesday": "consequat culpa ut consectetur est amet in laborum nulla non",
+      "thursday": "cupidatat excepteur eiusmod id enim et nostrud veniam nostrud veniam",
+      "friday": "velit quis proident laborum minim proident pariatur veniam id culpa"
+    },
+    {
+      "id": 3,
+      "monday": "eiusmod occaecat cillum elit aliqua cupidatat voluptate eu laborum tempor",
+      "tuesday": "proident ea eu reprehenderit laboris cupidatat nostrud esse pariatur aute",
+      "wednesday": "laborum veniam cupidatat sunt nulla elit nisi sunt labore culpa",
+      "thursday": "cillum exercitation nostrud minim irure labore elit adipisicing ut nostrud",
+      "friday": "est et est exercitation cupidatat est nisi voluptate sunt ex"
+    },
+    {
+      "id": 4,
+      "monday": "ex non quis mollit pariatur laboris incididunt non fugiat tempor",
+      "tuesday": "proident ex mollit laborum excepteur officia cupidatat labore aute ipsum",
+      "wednesday": "ullamco laboris consectetur aliquip do ut eiusmod elit pariatur est",
+      "thursday": "consectetur officia laborum consequat sit est tempor Lorem voluptate dolore",
+      "friday": "ipsum ipsum minim laborum ex sint voluptate ipsum enim laboris"
+    },
+    {
+      "id": 5,
+      "monday": "labore quis quis ipsum exercitation magna non adipisicing enim eu",
+      "tuesday": "minim enim ut voluptate ipsum ex proident culpa consectetur labore",
+      "wednesday": "sunt laboris laboris do velit consequat dolor dolore cillum exercitation",
+      "thursday": "in qui labore quis ea reprehenderit Lorem excepteur excepteur sunt",
+      "friday": "laborum sunt exercitation in sint proident Lorem commodo adipisicing Lorem"
+    },
+    {
+      "id": 6,
+      "monday": "velit Lorem in veniam nostrud enim anim ea culpa cillum",
+      "tuesday": "proident officia veniam pariatur elit ea deserunt pariatur anim consequat",
+      "wednesday": "veniam anim esse consectetur cupidatat fugiat laborum do ipsum exercitation",
+      "thursday": "dolore aliqua qui occaecat sit amet laborum nostrud magna esse",
+      "friday": "non quis incididunt velit commodo velit ex culpa esse commodo"
+    },
+    {
+      "id": 7,
+      "monday": "nisi excepteur in proident amet consequat elit cupidatat deserunt adipisicing",
+      "tuesday": "exercitation proident eiusmod voluptate ad velit sit ad do elit",
+      "wednesday": "est commodo magna id velit eu voluptate quis dolore esse",
+      "thursday": "mollit minim sit tempor proident ullamco esse commodo labore et",
+      "friday": "quis non mollit Lorem commodo do pariatur labore minim adipisicing"
+    },
+    {
+      "id": 8,
+      "monday": "aliqua pariatur laborum esse incididunt voluptate qui amet aliquip cillum",
+      "tuesday": "adipisicing officia eiusmod minim eiusmod labore anim quis ad nostrud",
+      "wednesday": "ea ex id dolor ullamco ex elit officia aliqua qui",
+      "thursday": "nisi ipsum elit aliqua exercitation do eiusmod excepteur voluptate tempor",
+      "friday": "laborum nulla incididunt irure et in incididunt excepteur Lorem anim"
+    },
+    {
+      "id": 9,
+      "monday": "quis aute minim aliqua culpa reprehenderit aute adipisicing aute quis",
+      "tuesday": "officia veniam labore sunt incididunt Lorem et reprehenderit proident dolor",
+      "wednesday": "velit sit excepteur tempor officia laborum mollit elit consequat Lorem",
+      "thursday": "incididunt culpa nulla laborum tempor exercitation id aliquip dolor laborum",
+      "friday": "deserunt ipsum non cillum nulla incididunt enim mollit reprehenderit in"
+    },
+    {
+      "id": 10,
+      "monday": "reprehenderit dolor laborum irure ut veniam magna sit anim dolore",
+      "tuesday": "est ea ea eiusmod irure aliquip in minim consequat eu",
+      "wednesday": "sit reprehenderit esse dolore voluptate mollit ea velit ut nostrud",
+      "thursday": "qui mollit irure adipisicing aute laborum consectetur laborum tempor aute",
+      "friday": "do aliqua labore velit nulla aliquip veniam est eiusmod cupidatat"
+    }
+  ]
+}
