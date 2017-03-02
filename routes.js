@@ -2,7 +2,9 @@ const express = require('express');
 app = express();
 const BodyParser = require('body-parser');
 
-const users = require('./controllers/users');
+const users         = require('./controllers/users');
+const teams         = require('./controllers/teams');
+const schedules     =  require('./controllers/schedules');
 
 app.use(BodyParser.urlencoded({
     extended: true
@@ -49,15 +51,26 @@ app.get('/users/:id', function (req, res) {
 //            Schedule
 ///////////////////////////////////////
 app.get('/schedules', function (req, res) {
-    res.send('I return a list of schedules!')
+
+    schedules.findSchedules(function (err, schedulesArray) {
+
+        if(err) return res.status(500).send({'msg':'No users found - internal error.'})
+
+        res.send(schedulesArray)
+    })
+
 })
 
 app.get('/schedules/:id', function (req, res) {
 
     var id = req.params.id;
 
-    res.send({
-        id: id
+    schedules.findSchedule(id, function (err, schedule) {
+
+        if (schedule != null) {
+            res.status(200).send(schedule);
+        }
+        else console.log('No schedule');
     })
 })
 
@@ -68,14 +81,27 @@ app.get('/schedules/:id', function (req, res) {
 ///////////////////////////////////////
 
 app.get('/teams', function (req, res) {
-    res.send('I return a list of teams')
+    teams.findTeams(function (err, teamsArray) {
+
+        if(err) return res.status(500).send({'msg':'No teams found - internal error.'})
+
+        res.send(teamsArray)
+
+    })
 })
 
 app.get('/teams/:id', function (req, res) {
 
     var id = req.params.id;
 
-    res.send(id)
+    teams.findTeam(id, function (err, team) {
+
+        if (team != null) {
+            res.status(200).send(team);
+        }
+        else console.log('No team');
+
+    })
 })
 
 // _____________________________________________________________________________________________________________________
