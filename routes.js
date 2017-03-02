@@ -22,11 +22,13 @@ app.use(BodyParser.json());
 app.get('/users', function (req, res) {
     //res.send('I return a list of users!')
 
-    users.findUsers(function (err, usersArray) {
+    users.findUsers(function (err, users) {
 
-        if(err) return res.status(500).send({'msg':'No users found - internal error.'})
+        if (err) {
+            return res.status(404).json({error: 'Users not found'});
+        }
 
-        res.send(usersArray)
+        res.send(users)
 
     })
 })
@@ -37,7 +39,7 @@ app.get('/users/:id', function (req, res) {
 
     users.findUser(id, function (err, user) {
         if (err) {
-            res.json({error: 'User not found'});
+            return res.status(404).json({error: 'User not found'});
         }
 
         res.json(user)
@@ -80,11 +82,13 @@ app.get('/schedules/:id', function (req, res) {
 ///////////////////////////////////////
 
 app.get('/teams', function (req, res) {
-    teams.findTeams(function (err, teamsArray) {
+    teams.findTeams(function (err, teams) {
 
-        if(err) return res.status(500).send({'msg':'No teams found - internal error.'})
+        if (err) {
+            return res.status(404).json({error: 'Teams not found'});
+        }
 
-        res.send(teamsArray)
+        res.json(teams)
 
     })
 })
@@ -95,10 +99,11 @@ app.get('/teams/:id', function (req, res) {
 
     teams.findTeam(id, function (err, team) {
 
-        if (team != null) {
-            res.status(200).send(team);
+        if (err) {
+            return res.status(404).json({error: 'Team not found'});
         }
-        else console.log('No team');
+
+        res.json(team)
 
     })
 })

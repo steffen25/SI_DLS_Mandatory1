@@ -1,24 +1,25 @@
+var fs = require('fs');
+
 module.exports.findTeams = function (callback) {
 
-    // Instead of this, run through json document and return all teams
-    var teams = {
-        teamId: "1",
-        numberOFStudent: 30
-    }
-
-    callback(null, teams)
+    fs.readFile('./resources/teams.json', 'utf8', function (err, data) {
+        if (err) throw err; // we'll not consider error handling for now
+        var teams = JSON.parse(data);
+        callback(null, teams)
+    });
 }
 
 // Find one specific user by id.
 module.exports.findTeam = function (teamId, callback) {
 
-    // Instead of this, run through json document and return team with specific id
-
-    var team = {
-        id: 1,
-        name: "SI - System integration"
-    }
-
-    callback(null, team)
+    fs.readFile('./resources/teams.json', 'utf8', function (err, data) {
+        if (err) throw err; // we'll not consider error handling for now
+        var teams = JSON.parse(data);
+        if (teams[teamId-1] != null) {
+            callback(null, teams[teamId-1])
+        } else {
+            callback("Team not found", null)
+        }
+    });
 
 }
