@@ -82,7 +82,7 @@
     },
     {
       "id": 9,
-      "name": "Snyder Harper",
+      "name": "Bob Harper",
       "age": 39,
       "gender": "male",
       "email": "snyderharper@hyplex.com",
@@ -92,6 +92,16 @@
     },
     {
       "id": 10,
+      "name": "John Harper",
+      "age": 39,
+      "gender": "male",
+      "email": "snyderharper@hyplex.com",
+      "phone": "+1 (818) 444-3630",
+      "registered": "2014-01-31T07:53:33 -01:00",
+      "teamId": 9
+    },
+    {
+      "id": 11,
       "name": "Peck Vincent",
       "age": 31,
       "gender": "male",
@@ -104,52 +114,52 @@
   "teams": [
     {
       "id": 1,
-      "name": "Alma Powell",
+      "name": "Software Dev 2017 summer intake",
       "scheduleId": 1
     },
     {
       "id": 2,
-      "name": "Chan Solis",
+      "name": "Software Dev 2017 winter intake",
       "scheduleId": 2
     },
     {
       "id": 3,
-      "name": "Thomas Mcmillan",
+      "name": "Web Dev 2017 Summer intake",
       "scheduleId": 3
     },
     {
       "id": 4,
-      "name": "Roxie Murray",
+      "name": "Web Dev 2017 Winter intake",
       "scheduleId": 4
     },
     {
       "id": 5,
-      "name": "Lindsay Leonard",
+      "name": "iOS Development 2017 Spring",
       "scheduleId": 5
     },
     {
       "id": 6,
-      "name": "Corinne Yang",
+      "name": "iOS Development 2016 Spring",
       "scheduleId": 6
     },
     {
       "id": 7,
-      "name": "Mavis Thompson",
+      "name": "Node.js backend development",
       "scheduleId": 7
     },
     {
       "id": 8,
-      "name": "Harmon Bates",
+      "name": "SI - System integration",
       "scheduleId": 8
     },
     {
       "id": 9,
-      "name": "Lizzie Merrill",
+      "name": "Web security",
       "scheduleId": 9
     },
     {
       "id": 10,
-      "name": "Meyer Molina",
+      "name": "DLS",
       "scheduleId": 10
     }
   ],
