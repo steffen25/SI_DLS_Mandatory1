@@ -1,3 +1,4 @@
+Made by: Steffen Thomsen - Thomas Attermann 
 ________________________________________________________
 
 /////////////////// Schedule Planner ///////////////////
@@ -25,7 +26,7 @@ ________________________________________________________
 3. Usage:
 
 Access the webservice with your browser/Postman. 
-The application runs on Port 4000.
+The application runs on Port 4000 and returns data in JSON format. 
 All requests are GET requests.
 
 	1. Get all users:
