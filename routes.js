@@ -28,7 +28,7 @@ app.get('/users', function (req, res) {
             return res.status(404).json({error: 'Users not found'});
         }
 
-        res.send(users)
+        res.status(200).json(users)
 
     })
 })
@@ -42,7 +42,7 @@ app.get('/users/:id', function (req, res) {
             return res.status(404).json({error: 'User not found'});
         }
 
-        res.json(user)
+        res.status(200).json(user)
     })
 })
 
@@ -88,7 +88,7 @@ app.get('/teams', function (req, res) {
             return res.status(404).json({error: 'Teams not found'});
         }
 
-        res.json(teams)
+        res.status(200).json(teams)
 
     })
 })
@@ -103,7 +103,7 @@ app.get('/teams/:id', function (req, res) {
             return res.status(404).json({error: 'Team not found'});
         }
 
-        res.json(team)
+        res.status(200).json(team)
 
     })
 })
