@@ -1,5 +1,8 @@
 var fs = require('fs');
 
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+
 
 module.exports.findUsers = function (callback) {
     fs.readFile('./resources/data.json', 'utf8', function (err, data) {
@@ -28,3 +31,34 @@ module.exports.findUser = function (userId, callback) {
         }
     });
 }
+
+/**
+ * Create a user
+ */
+exports.create = function(req, res) {
+
+    var user = new User({
+        password: req.body.password,
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        address: req.body.address,
+        phone: req.body.phone,
+        teamId: req.body.teamId,
+        isAdmin: req.body.isAdmin,
+    });
+
+    console.log(user);
+    user.save(function (err) {
+        if (err) {
+            console.log(err);
+        }
+
+        // TODO : Fix ordentlig måde at håndtere fx fejl ved oprettelse
+        // saved!
+        // res.json({
+        //     success: true,
+        //     data: user
+        // });
+    });
+};

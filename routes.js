@@ -46,6 +46,16 @@ app.get('/users/:id', function (req, res) {
     })
 })
 
+// Create user
+app.post('/users', function (req, res) {
+
+    users.create(req, function (err, user) {
+
+        if (err) {
+            res.json({"Fail":"Fail"})
+        }
+    })
+})
 
 // _____________________________________________________________________________________________________________________
 
