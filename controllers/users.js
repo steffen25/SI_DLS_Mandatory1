@@ -35,23 +35,28 @@ module.exports.findUser = function (userId, callback) {
 /**
  * Create a user
  */
-exports.create = function(req, res) {
+exports.create = function(body, callback) {
 
     var user = new User({
-        password: req.body.password,
-        email: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        address: req.body.address,
-        phone: req.body.phone,
-        teamId: req.body.teamId,
-        isAdmin: req.body.isAdmin,
+        password: body.password,
+        email: body.email,
+        firstName: body.firstName,
+        lastName: body.lastName,
+        address: body.address,
+        phone: body.phone,
+        teamId: body.teamId,
+        isAdmin: body.isAdmin,
     });
 
-    console.log(user);
     user.save(function (err) {
         if (err) {
-            console.log(err);
+            if(err.code == 11000) {
+                console.log("110000")
+                callback({error: "bla"}, null)
+            }
+            callback(err, null);
+        } else {
+            callback(null, user)
         }
 
         // TODO : Fix ordentlig måde at håndtere fx fejl ved oprettelse

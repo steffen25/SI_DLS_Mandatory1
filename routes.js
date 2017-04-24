@@ -49,10 +49,21 @@ app.get('/users/:id', function (req, res) {
 // Create user
 app.post('/users', function (req, res) {
 
-    users.create(req, function (err, user) {
+    var body = req.body;
 
+    users.create(body, function (err, user) {
         if (err) {
-            res.json({"Fail":"Fail"})
+
+            // If the email is already in use.
+            if (err.code == 11000) {
+                res.status(400).json({emailTaken: true})
+            }
+
+            res.status(500)
+
+            // Successfull create.
+        } else {
+            res.status(201).json({user: user, success: true});
         }
     })
 })
