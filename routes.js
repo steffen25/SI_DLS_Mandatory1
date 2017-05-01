@@ -5,6 +5,7 @@ const BodyParser = require('body-parser');
 const users         = require('./controllers/users');
 const teams         = require('./controllers/teams');
 const schedules     =  require('./controllers/schedules');
+const holidays     =  require('./controllers/holidays');
 
 app.use(BodyParser.urlencoded({
     extended: true
@@ -170,6 +171,28 @@ app.post('/teams/', function (req, res) {
         }
     })
 
+})
+
+// _____________________________________________________________________________________________________________________
+
+
+
+
+
+///////////////////////////////////////
+//            Holidays
+///////////////////////////////////////
+
+app.get('/holidays', function (req, res) {
+    holidays.getHolidays(function (err, holidays) {
+
+        if (err) {
+            return res.status(404).json({error: 'Error occured while fetching holidays'});
+        }
+
+        res.status(200).json(holidays)
+
+    })
 })
 
 // _____________________________________________________________________________________________________________________
