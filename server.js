@@ -1,8 +1,9 @@
 var express = require('express');
-app = express();
 const fs       = require('fs');
-
+const passport = require('passport');
 const mongoose = require('mongoose');
+app = express();
+require('./config/passport')(passport)
 require('./models/user');
 
 

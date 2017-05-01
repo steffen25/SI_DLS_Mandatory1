@@ -68,6 +68,28 @@ app.post('/users', function (req, res) {
     })
 })
 
+// Login
+app.post('/login', function (req, res) {
+
+    var email = req.body.email;
+    var password = req.body.password;
+    console.log(email)
+    console.log(password)
+
+    users.authenticate(email, password, function (err, user) {
+        if (err) {
+            res.status(401);
+            res.send({
+                success: false,
+                error: err
+            });
+            return res;
+        }
+
+        return res.status(201).json({success: true, user});
+    })
+})
+
 // _____________________________________________________________________________________________________________________
 
 ///////////////////////////////////////
