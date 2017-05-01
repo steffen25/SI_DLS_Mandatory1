@@ -37,7 +37,7 @@ const UserSchema = new Schema({
         trim: true,
     },
     teamId: {
-        type: Number,
+        type: Schema.ObjectId,
         trim: true,
     },
     isAdmin: {

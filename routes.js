@@ -62,6 +62,23 @@ app.post('/login', function (req, res) {
     })
 })
 
+// Edit user team
+app.put('/users/:id', function (req, res) {
+
+    var userId = req.params.id;
+
+    var teamId = req.body.teamId;
+
+    users.updateTeam(userId, teamId, function (err, updatedUser) {
+
+        if (err) {
+            res.status(500).json({"Internal Server error updating user": err})
+        } else {
+            res.status(201).json({"succes" : true, data: updatedUser})
+        }
+    })
+
+})
 // _____________________________________________________________________________________________________________________
 
 ///////////////////////////////////////

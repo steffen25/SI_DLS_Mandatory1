@@ -4,6 +4,7 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const User = mongoose.model('User');
 var jwt = require('jsonwebtoken');
+const teams         = require('./teams');
 
 /**
  * Create a user
@@ -71,4 +72,61 @@ exports.authenticate = function (email, password, callback) {
                 return callback({error: "The email or password does not match"}, null)
         });
     });
+};
+
+/**
+ * Edit a users team
+ */
+
+exports.updateTeam = function(userId, teamId, callback) {
+
+    console.log("userid: "  + userId);
+
+    console.log("Loggiing: "  + teamId);
+
+    User.findById(userId, function (err, user) {
+
+        // If no user was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found user!
+        if (user != null) {
+
+            teams.findTeam(teamId, function (err, team) {
+
+                if (team != null) {
+
+                    user.teamId = teamId;
+
+                    user.save(function (err, updatedUser) {
+
+                        if(err) {
+                            callback(err, null)
+                        } else {
+                            callback(null, updatedUser)
+                        }
+                    })
+                }
+            });
+        }
+    });
+};
+
+exports.findUser = function (id, callback) {
+
+    User.findById(id, function (err, user) {
+
+        // If no user was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found user!
+        if (user != null) {
+            callback(null, user)
+        }
+    });
+
 };
