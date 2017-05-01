@@ -58,6 +58,7 @@ exports.create = function(body, callback) {
             }
             callback(err, null);
         } else {
+            user.password = undefined;
             callback(null, user)
         }
 

@@ -73,8 +73,6 @@ app.post('/login', function (req, res) {
 
     var email = req.body.email;
     var password = req.body.password;
-    console.log(email)
-    console.log(password)
 
     users.authenticate(email, password, function (err, user) {
         if (err) {
@@ -86,7 +84,7 @@ app.post('/login', function (req, res) {
             return res;
         }
 
-        return res.status(201).json({success: true, user});
+        return res.status(201).json({success: true, data: user});
     })
 })
 
