@@ -31,36 +31,35 @@ soap.createClient(url, function(err, client) {
             var holidays = result.return.publicHolidays;
             var holidaysArr = [];
             
-
-
-// TODO: Fix indentation
             var promises = holidays.map(function(item) {
                     return new Promise(function(resolve, reject) {
                         var dateStr = ''+item.date.day + '-' + item.date.month + '-' + item.date.year+'';
 
-                var date = moment(dateStr, 'D-M-YYYY').format("YYYY-MM-DD");
+                        var date = moment(dateStr, 'D-M-YYYY').format("YYYY-MM-DD");
 
-                var holiday = new Holiday({
-                    date: date,
-                    dayOfWeek: item.date.dayOfWeek,
-                    localName: item.localName,
-                    englishName: item.englishName
-               })
+                        var holiday = new Holiday({
+                            date: date,
+                            dayOfWeek: item.date.dayOfWeek,
+                            localName: item.localName,
+                            englishName: item.englishName
+                        })
 
-               holiday.save(function (err) {
-                    if (err) {
-                        reject(err)
-                    } else {
-                        holidaysArr.push(holiday)
-                        resolve();
-                    }
-                });
+                        holiday.save(function (err) {
+                            if (err) {
+                                reject(err)
+                            } else {
+                                holidaysArr.push(holiday)
+                                resolve();
+                            }
+                        });
 
                     });
                 });
 
                 Promise.all(promises)
-                .then(function() { callback(null, holidaysArr); })
+                .then(function() {
+                     callback(null, holidaysArr); 
+                    })
                 .catch(console.error);
 
         
