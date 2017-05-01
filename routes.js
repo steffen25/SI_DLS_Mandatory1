@@ -20,33 +20,6 @@ app.use(BodyParser.json());
 //            Users
 ///////////////////////////////////////
 
-app.get('/users', function (req, res) {
-    //res.send('I return a list of users!')
-
-    users.findUsers(function (err, users) {
-
-        if (err) {
-            return res.status(404).json({error: 'Users not found'});
-        }
-
-        res.status(200).json(users)
-
-    })
-})
-
-app.get('/users/:id', function (req, res) {
-
-    var id = req.params.id;
-
-    users.findUser(id, function (err, user) {
-        if (err) {
-            return res.status(404).json({error: 'User not found'});
-        }
-
-        res.status(200).json(user)
-    })
-})
-
 // Create user
 app.post('/users', function (req, res) {
 
