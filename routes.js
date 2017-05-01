@@ -150,4 +150,26 @@ app.get('/teams/:id', function (req, res) {
     })
 })
 
+// Create team
+app.post('/teams/', function (req, res) {
+
+    var token = req.headers['authorization'].replace(/^JWT\s/, '');
+    var teamData = req.body
+
+    teams.create(token, teamData, function (err, team) {
+
+        if (err) {
+            console.log(err);
+
+            // Not authorized / error creating team / Duplicate teamname // TODO: Send specific fejl alt afhængigt af hvad går galt.
+            return res.status(401).json({"Authorized": false});
+        } else {
+
+            // Succesfully created team
+            return res.status(201).json({"Created team" : true, "Team":team});
+        }
+    })
+
+})
+
 // _____________________________________________________________________________________________________________________
