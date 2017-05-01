@@ -1,25 +1,86 @@
-var fs = require('fs');
+var nJwt = require('njwt');
+require('../models/schedule');
+const mongoose = require('mongoose');
+const Schedule = mongoose.model('Schedule');
 
-module.exports.findSchedules = function (callback) {
-    
-    fs.readFile('./resources/data.json', 'utf8', function (err, data) {
-        if (err) throw err; // we'll not consider error handling for now
-        var schedule = JSON.parse(data).schedules;
-        callback(null, schedule)
-    });
-}
+module.exports.createSchedule = function(req, callback) {
 
-// Find one specific user by id.
-module.exports.findSchedule = function (scheduleId, callback) {
+    var token = req.headers['authorization'].replace(/^JWT\s/, '');
 
-    fs.readFile('./resources/data.json', 'utf8', function (err, data) {
-        if (err) throw err; // we'll not consider error handling for now
-        var schedules = JSON.parse(data).schedules;
-        if (schedules[scheduleId-1] != null) {
-            callback(null, schedules[scheduleId-1])
-        } else {
-            callback("Schedule not found", null)
+    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
+        if (err) {
+
+            console.log(err); // Token has expired, has been tampered with, etc
+            return callback(err, null)
+
         }
-    });
 
+        var isAdmin = verifiedJwt.body._doc.isAdmin
+
+        if (!isAdmin) {
+            var err = {
+                error: {
+                    msg: "Unauthorized"
+                }
+            }
+            return callback(err)
+
+        }
+
+        // create schedule
+        // validate days array contains
+        var errors = [];
+        var monday = req.body.monday;
+        var tuesday = req.body.tuesday;
+        var wednesday = req.body.wednesday;
+        var thursday = req.body.thursday;
+        var friday = req.body.friday;
+
+        if (typeof monday === 'undefined' || monday == '') {
+            errors.push({
+                msg: "Monday is required"
+            })
+        }
+        
+        if (typeof tuesday === 'undefined' || tuesday == '') {
+            errors.push({
+                msg: "Tuesday is required"
+            })
+        }
+        
+        if (typeof wednesday === 'undefined' || wednesday == '') {
+            errors.push({
+                msg: "Wednesday is required"
+            })
+        }
+        
+        if (typeof thursday === 'undefined' || thursday == '') {
+            errors.push({
+                msg: "Thursday is required"
+            })
+        }
+        
+        if (typeof friday === 'undefined' || friday == '') {
+            errors.push({
+                msg: "Friday is required"
+            })
+        }
+
+        if (errors.length !== 0) {
+            return callback(errors, null)
+        }
+
+        // create and save schedule
+        var schedule = new Schedule({days: [{monday}, {tuesday}, {wednesday}, {thursday}, {friday}]})
+
+        schedule.save(function (err) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, schedule)
+                    }
+                });
+
+
+    });
 }

@@ -10,7 +10,7 @@ const Team = mongoose.model('Team');
 exports.create = function (token, teamData, callback) {
 
     // Verify token
-    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt){
+    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
         if (err){
 
             console.log(err); // Token has expired, has been tampered with, etc

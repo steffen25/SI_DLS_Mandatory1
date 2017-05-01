@@ -67,6 +67,14 @@ app.post('/login', function (req, res) {
 ///////////////////////////////////////
 //            Schedule
 ///////////////////////////////////////
+app.post('/schedules', function (req, res) {
+
+    schedules.createSchedule(req, function (err, schedule) {
+        if(err) return res.status(500).send({errors: err})
+    })
+
+})
+
 app.get('/schedules', function (req, res) {
 
     schedules.findSchedules(function (err, schedulesArray) {
