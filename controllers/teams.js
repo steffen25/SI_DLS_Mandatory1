@@ -48,3 +48,20 @@ exports.create = function (token, teamData, callback) {
     });
 
 };
+
+exports.findTeam = function (id, callback) {
+
+    Team.findById(id, function (err, team) {
+
+        // If no team was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found team!
+        if (team != null) {
+            callback(null, team)
+        }
+    });
+
+};
