@@ -114,6 +114,8 @@ exports.updateTeam = function(userId, teamId, callback) {
     });
 };
 
+// ---------- GET USER BY SPECIFIC ID  -----------//
+
 exports.findUser = function (id, callback) {
 
     User.findById(id, function (err, user) {
@@ -129,4 +131,24 @@ exports.findUser = function (id, callback) {
         }
     });
 
+};
+
+// ---------- GET ALL USERS -----------//
+
+exports.findUsers = function (callback) {
+
+    User.find({}, function(err, users) {
+
+        if (err) {
+            callback(err, null)
+        } else {
+            var usersMap = {};
+
+            users.forEach(function(user) {
+                usersMap[user._id] = user;
+            });
+
+            callback(err, usersMap)
+        }
+    });
 };

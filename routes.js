@@ -203,6 +203,24 @@ app.put('/teams/:id', function (req, res) {
 
 })
 
+// Delete team
+app.delete('/teams/:id', function (req, res) {
+
+    var teamId = req.params.id;
+
+
+    teams.deleteTeam(teamId, function (err, success) {
+
+        if (err) {
+            return res.status(500).json({"Internal Server error deleting team": err})
+        } else {
+            return res.status(200).json(success)
+        }
+    })
+})
+
+
+
 
 // _____________________________________________________________________________________________________________________
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
