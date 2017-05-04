@@ -1,4 +1,5 @@
 var nJwt = require('njwt');
+const moment = require('moment')
 require('../models/schedule');
 const mongoose = require('mongoose');
 const Schedule = mongoose.model('Schedule');
@@ -85,8 +86,6 @@ module.exports.createSchedule = function(req, callback) {
     });
 }
 
-// ---------- GET schedule by ID -----------//
-
 exports.findSchedule = function (id, callback) {
 
     Schedule.findById(id, function (err, schedule) {
@@ -101,24 +100,42 @@ exports.findSchedule = function (id, callback) {
             callback(null, schedule)
         }
     });
+
 };
 
-// ---------- GET ALL schedules -----------//
+exports.getSchedulesByWeekNumber = function (weekNumber, callback) {
 
-exports.findSchedules = function (callback) {
-
-    Schedule.find({}, function(err, schedules) {
-
+    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
         if (err) {
-            callback(err, null)
-        } else {
-            var scheduleMap = {};
 
-            schedules.forEach(function(schedule) {
-                scheduleMap[schedule._id] = schedule;
-            });
+            console.log(err); // Token has expired, has been tampered with, etc
+            return callback(err, null)
 
-            callback(err, scheduleMap)
         }
+
+        var teamId = verifiedJwt.body._doc.teamId
+
+
+
+
     });
+
+    
+
+    var week = moment().format('W');
+    if (weekNumber) {
+        week = weekNumber;
+    }
+
+    var weekObj = moment().startOf('isoWeek').week(week);
+    var days = [];
+
+    for (i = 1; i <= 5; i++) {
+        var day = weekObj.isoWeekday(i).format("DD-MM-YYYY ,dddd")
+        days.push(day)
+
+   };
+
+   return callback(null, days)
+
 };
