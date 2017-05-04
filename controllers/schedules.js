@@ -5,12 +5,13 @@ require('../models/team');
 const mongoose = require('mongoose');
 const Schedule = mongoose.model('Schedule');
 const Team = mongoose.model('Team');
+var weatherController = require('./weather')
 
-module.exports.createSchedule = function(req, callback) {
+module.exports.createSchedule = function (req, callback) {
 
     var token = req.headers['authorization'].replace(/^JWT\s/, '');
 
-    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
+    nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {
 
             console.log(err); // Token has expired, has been tampered with, etc
@@ -44,25 +45,25 @@ module.exports.createSchedule = function(req, callback) {
                 msg: "Monday is required"
             })
         }
-        
+
         if (typeof tuesday === 'undefined' || tuesday == '') {
             errors.push({
                 msg: "Tuesday is required"
             })
         }
-        
+
         if (typeof wednesday === 'undefined' || wednesday == '') {
             errors.push({
                 msg: "Wednesday is required"
             })
         }
-        
+
         if (typeof thursday === 'undefined' || thursday == '') {
             errors.push({
                 msg: "Thursday is required"
             })
         }
-        
+
         if (typeof friday === 'undefined' || friday == '') {
             errors.push({
                 msg: "Friday is required"
@@ -74,15 +75,15 @@ module.exports.createSchedule = function(req, callback) {
         }
 
         // create and save schedule
-        var schedule = new Schedule({days: [{monday}, {tuesday}, {wednesday}, {thursday}, {friday}]})
+        var schedule = new Schedule({ days: [{ monday }, { tuesday }, { wednesday }, { thursday }, { friday }] })
 
         schedule.save(function (err) {
-                    if (err) {
-                        callback(err, null);
-                    } else {
-                        callback(null, schedule)
-                    }
-                });
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, schedule)
+            }
+        });
 
 
     });
@@ -111,7 +112,7 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
 
     console.log(req.params.weekNumber)
 
-    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
+    nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {
 
             console.log(err); // Token has expired, has been tampered with, etc
@@ -123,49 +124,49 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
         console.log(teamId)
         Team.findById(teamId, function (err, team) {
 
-        // If no team was found
-        if (err != null) {
-            return callback(err, null);
-        }
+            // If no team was found
+            if (err != null) {
+                return callback(err, null);
+            }
 
-        if (team == null) {
-            return callback({msg: "User doesnt have a team"}, null)
-        }
+            if (team == null) {
+                return callback({ msg: "User doesnt have a team" }, null)
+            }
 
-        // Found team!
-        if (team != null) {
-            Schedule.findById(team.scheduleId, function (err, schedule) {
-                // If no schedule was found
-                if (err != null) {
-                    return callback(err, null);
-                }
-
-                if (schedule == null) {
-                    return callback({msg: "Team doesnt have a schedule id"}, null)
-                }
-
-                // Found team!
-                if (schedule != null) {
-                    var week = moment().format('W');
-                    if (req.params.weekNumber) {
-                        week = req.params.weekNumber;
+            // Found team!
+            if (team != null) {
+                Schedule.findById(team.scheduleId, function (err, schedule) {
+                    // If no schedule was found
+                    if (err != null) {
+                        return callback(err, null);
                     }
 
-                    var weekObj = moment().startOf('isoWeek').week(week);
-                    var scheduleDays = schedule.days;
+                    if (schedule == null) {
+                        return callback({ msg: "Team doesnt have a schedule id" }, null)
+                    }
 
-                    for (i = 0; i < scheduleDays.length; i++) {
-                        var day = weekObj.isoWeekday(i+1).format("DD-MM-YYYY, dddd")
-                        scheduleDays[i].date = day;
-                    };
+                    // Found team!
+                    if (schedule != null) {
+                        var week = moment().format('W');
+                        if (req.params.weekNumber) {
+                            week = req.params.weekNumber;
+                        }
 
-                    return callback(null, scheduleDays)
+                        var weekObj = moment().startOf('isoWeek').week(week);
+                        var scheduleDays = schedule.days;
 
-                }
-            });
-        }
+                        for (i = 0; i < scheduleDays.length; i++) {
+                            var day = weekObj.isoWeekday(i + 1).format("DD-MM-YYYY, dddd")
+                            scheduleDays[i].date = day;
+                        };
+
+                        return callback(null, scheduleDays)
+
+                    }
+                });
+            }
+        });
     });
-  });
 };
 
 exports.getScheduleByWeekday = function (req, callback) {
@@ -174,7 +175,7 @@ exports.getScheduleByWeekday = function (req, callback) {
 
     console.log(req.params.weekNumber)
 
-    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
+    nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {
 
             console.log(err); // Token has expired, has been tampered with, etc
@@ -186,52 +187,82 @@ exports.getScheduleByWeekday = function (req, callback) {
         console.log(teamId)
         Team.findById(teamId, function (err, team) {
 
-        // If no team was found
-        if (err != null) {
-            return callback(err, null);
-        }
+            // If no team was found
+            if (err != null) {
+                return callback(err, null);
+            }
 
-        if (team == null) {
-            return callback({msg: "User doesnt have a team"}, null)
-        }
+            if (team == null) {
+                return callback({ msg: "User doesnt have a team" }, null)
+            }
 
-        // Found team!
-        if (team != null) {
-            Schedule.findById(team.scheduleId, function (err, schedule) {
-                // If no schedule was found
-                if (err != null) {
-                    return callback(err, null);
-                }
-
-                if (schedule == null) {
-                    return callback({msg: "Team doesnt have a schedule id"}, null)
-                }
-
-                // Found team!
-                if (schedule != null) {
-                    var week = moment().format('W');
-                    if (req.params.weekNumber) {
-                        week = req.params.weekNumber;
+            // Found team!
+            if (team != null) {
+                Schedule.findById(team.scheduleId, function (err, schedule) {
+                    // If no schedule was found
+                    if (err != null) {
+                        return callback(err, null);
                     }
 
-                    var weekObj = moment().startOf('isoWeek').week(week);
-                    var scheduleDays = schedule.days;
-                    var requestedDay = 1;
-                    if (req.params.day) {
-                        requestedDay = req.params.day;
+                    if (schedule == null) {
+                        return callback({ msg: "Team doesnt have a schedule id" }, null)
                     }
 
-                    if (scheduleDays[requestedDay-1] === undefined) {
-                        return callback({msg: requestedDay + " does not exist"})
-                    }
-                        
-                    var day = weekObj.weekday(requestedDay).format("DD-MM-YYYY, dddd")
-                    scheduleDays[requestedDay-1].date = day;
-                    return callback(null, scheduleDays[requestedDay-1])
+                    // Found team!
+                    if (schedule != null) {
+                        var week = moment().format('W');
+                        if (req.params.weekNumber) {
+                            week = req.params.weekNumber;
+                        }
 
-                }
-            });
-        }
+                        var weekObj = moment().startOf('isoWeek').week(week);
+                        var scheduleDays = schedule.days;
+                        var requestedDay = 1;
+                        if (req.params.day) {
+                            requestedDay = req.params.day;
+                        }
+
+                        if (scheduleDays[requestedDay - 1] === undefined) {
+                            return callback({ msg: requestedDay + " does not exist" })
+                        }
+
+                        const today = moment();
+                        var day = weekObj.weekday(requestedDay).format("DD-MM-YYYY, dddd")
+                        scheduleDays[requestedDay - 1].date = day;
+
+
+                        if (today.isSame(weekObj.weekday(requestedDay), 'day')) {
+                            var getWeather = new Promise((resolve, reject) => {
+                                weatherController.getCurrentWeather(function (err, weatherData) {
+                                    if (err) {
+                                        console.log("Error getting weather: " + err)
+                                    } else {
+                                        const currentTemp = weatherData.currentTemp;
+                                        const description = weatherData.description;
+
+                                        scheduleDays[requestedDay - 1].weather = {
+                                            currentTemp: currentTemp,
+                                            description: description
+                                        }
+
+                                        resolve();
+
+                                    }
+                                })
+                            })
+
+                            getWeather
+                                .then(function () {
+                                    return callback(null, scheduleDays[requestedDay - 1])
+                                })
+                                .catch(console.error);
+                        }
+
+                        return callback(null, scheduleDays[requestedDay - 1])
+
+                    }
+                });
+            }
+        });
     });
-  });
 };
