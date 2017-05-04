@@ -108,6 +108,19 @@ app.get('/schedules/week/:weekNumber?', function (req, res) {
 
 })
 
+app.get('/schedules/week/:weekNumber?/day/:day?', function (req, res) {
+
+
+    schedules.getScheduleByWeekday(req, function(err, schedule) {
+        if (err != null) {
+            return res.status(400).send({errors: err})
+        }
+
+        return res.status(200).json(schedule)
+    })
+
+})
+
 app.get('/schedules/:id', function (req, res) {
 
     var id = req.params.id;
