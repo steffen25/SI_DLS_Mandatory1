@@ -216,7 +216,10 @@ exports.getScheduleByWeekday = function (req, callback) {
 
                     var weekObj = moment().startOf('isoWeek').week(week);
                     var scheduleDays = schedule.days;
-                    var requestedDay = req.params.day;
+                    var requestedDay = 1;
+                    if (req.params.day) {
+                        requestedDay = req.params.day;
+                    }
 
                     if (scheduleDays[requestedDay-1] === undefined) {
                         return callback({msg: requestedDay + " does not exist"})
