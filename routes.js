@@ -87,7 +87,10 @@ app.put('/users/:id', function (req, res) {
 app.post('/schedules', function (req, res) {
 
     schedules.createSchedule(req, function (err, schedule) {
-        if(err) return res.status(500).send({errors: err})
+        if (err != null) {
+            return res.status(400).send({errors: err})
+        }
+        return res.status(200).json(schedule)
     })
 
 })
