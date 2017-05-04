@@ -52,13 +52,8 @@ exports.create = function (token, teamData, callback) {
 
 exports.updateTeam = function(teamId, scheduleId, callback) {
 
-    console.log("teamid: "  + teamId);
-
-    console.log("scheduleid: "  + scheduleId);
-
     Team.findById(teamId, function (err, team) {
-
-
+        
         // If no user was found
         if (err) {
             callback(err, null);
@@ -66,13 +61,10 @@ exports.updateTeam = function(teamId, scheduleId, callback) {
 
         // Found user!
         if (team != null) {
-            console.log("found team" + team)
 
             schedules.findSchedule(scheduleId, function (err, schedule) {
 
                 if (schedule != null) {
-
-                    console.log("FOUND SCHEDULE:" + schedule)
 
                     team.scheduleId = scheduleId
 
@@ -81,31 +73,11 @@ exports.updateTeam = function(teamId, scheduleId, callback) {
                         if(err) {
                             callback(err, null)
                         } else {
-
-                            console.log("____UPDATED TEAM")
                             callback(null, updatedTeam)
                         }
                     })
                 }
             })
-
-
-            // users.findTeam(teamId, function (err, team) {
-            //
-            //     if (team != null) {
-            //
-            //         user.teamId = teamId;
-            //
-            //         user.save(function (err, updatedUser) {
-            //
-            //             if(err) {
-            //                 callback(err, null)
-            //             } else {
-            //                 callback(null, updatedUser)
-            //             }
-            //         })
-            //     }
-            // });
         }
     });
 };
