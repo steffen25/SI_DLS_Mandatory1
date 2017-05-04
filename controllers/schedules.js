@@ -1,7 +1,10 @@
 var nJwt = require('njwt');
+const moment = require('moment')
 require('../models/schedule');
+require('../models/team');
 const mongoose = require('mongoose');
 const Schedule = mongoose.model('Schedule');
+const Team = mongoose.model('Team');
 
 module.exports.createSchedule = function(req, callback) {
 
@@ -85,8 +88,6 @@ module.exports.createSchedule = function(req, callback) {
     });
 }
 
-// ---------- GET schedule by ID -----------//
-
 exports.findSchedule = function (id, callback) {
 
     Schedule.findById(id, function (err, schedule) {
@@ -101,24 +102,133 @@ exports.findSchedule = function (id, callback) {
             callback(null, schedule)
         }
     });
+
 };
 
-// ---------- GET ALL schedules -----------//
+exports.getSchedulesByWeekNumber = function (req, callback) {
 
-exports.findSchedules = function (callback) {
+    var token = req.headers['authorization'].replace(/^JWT\s/, '');
 
-    Schedule.find({}, function(err, schedules) {
+    console.log(req.params.weekNumber)
 
+    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
         if (err) {
-            callback(err, null)
-        } else {
-            var scheduleMap = {};
 
-            schedules.forEach(function(schedule) {
-                scheduleMap[schedule._id] = schedule;
+            console.log(err); // Token has expired, has been tampered with, etc
+            return callback(err, null)
+
+        }
+
+        var teamId = verifiedJwt.body._doc.teamId
+        console.log(teamId)
+        Team.findById(teamId, function (err, team) {
+
+        // If no team was found
+        if (err != null) {
+            return callback(err, null);
+        }
+
+        if (team == null) {
+            return callback({msg: "User doesnt have a team"}, null)
+        }
+
+        // Found team!
+        if (team != null) {
+            Schedule.findById(team.scheduleId, function (err, schedule) {
+                // If no schedule was found
+                if (err != null) {
+                    return callback(err, null);
+                }
+
+                if (schedule == null) {
+                    return callback({msg: "Team doesnt have a schedule id"}, null)
+                }
+
+                // Found team!
+                if (schedule != null) {
+                    var week = moment().format('W');
+                    if (req.params.weekNumber) {
+                        week = req.params.weekNumber;
+                    }
+
+                    var weekObj = moment().startOf('isoWeek').week(week);
+                    var scheduleDays = schedule.days;
+
+                    for (i = 0; i < scheduleDays.length; i++) {
+                        var day = weekObj.isoWeekday(i+1).format("DD-MM-YYYY, dddd")
+                        scheduleDays[i].date = day;
+                    };
+
+                    return callback(null, scheduleDays)
+
+                }
             });
-
-            callback(err, scheduleMap)
         }
     });
+  });
+};
+
+exports.getScheduleByWeekday = function (req, callback) {
+
+    var token = req.headers['authorization'].replace(/^JWT\s/, '');
+
+    console.log(req.params.weekNumber)
+
+    nJwt.verify(token,"Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$",function(err, verifiedJwt) {
+        if (err) {
+
+            console.log(err); // Token has expired, has been tampered with, etc
+            return callback(err, null)
+
+        }
+
+        var teamId = verifiedJwt.body._doc.teamId
+        console.log(teamId)
+        Team.findById(teamId, function (err, team) {
+
+        // If no team was found
+        if (err != null) {
+            return callback(err, null);
+        }
+
+        if (team == null) {
+            return callback({msg: "User doesnt have a team"}, null)
+        }
+
+        // Found team!
+        if (team != null) {
+            Schedule.findById(team.scheduleId, function (err, schedule) {
+                // If no schedule was found
+                if (err != null) {
+                    return callback(err, null);
+                }
+
+                if (schedule == null) {
+                    return callback({msg: "Team doesnt have a schedule id"}, null)
+                }
+
+                // Found team!
+                if (schedule != null) {
+                    var week = moment().format('W');
+                    if (req.params.weekNumber) {
+                        week = req.params.weekNumber;
+                    }
+
+                    var weekObj = moment().startOf('isoWeek').week(week);
+                    var scheduleDays = schedule.days;
+                    var requestedDay = req.params.day;
+
+                    if (scheduleDays[requestedDay-1] === undefined) {
+                        return callback({msg: requestedDay + " does not exist"})
+                    }
+                        
+                    var day = weekObj.weekday(requestedDay).format("DD-MM-YYYY, dddd")
+                    scheduleDays[requestedDay-1].date = day;
+                    return callback(null, scheduleDays[requestedDay-1])
+
+                }
+            });
+        }
+    });
+  });
 };

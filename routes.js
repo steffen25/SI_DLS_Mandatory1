@@ -14,10 +14,11 @@ app.use(BodyParser.urlencoded({
 app.use(BodyParser.json());
 
 // _____________________________________________________________________________________________________________________
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                  Users
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//----------------------------------------------------------------------------------------------------------------------
+
+
+///////////////////////////////////////
+//            Users
+///////////////////////////////////////
 
 // Create user
 app.post('/users', function (req, res) {
@@ -78,14 +79,11 @@ app.put('/users/:id', function (req, res) {
     })
 
 })
-
 // _____________________________________________________________________________________________________________________
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                  Schedules
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//----------------------------------------------------------------------------------------------------------------------
 
-// Create schedule
+///////////////////////////////////////
+//            Schedule
+///////////////////////////////////////
 app.post('/schedules', function (req, res) {
 
     schedules.createSchedule(req, function (err, schedule) {
@@ -97,44 +95,51 @@ app.post('/schedules', function (req, res) {
 
 })
 
-// Get all schedules
-app.get('/schedules', function (req, res) {
+app.get('/schedules/week/:weekNumber?', function (req, res) {
 
-    schedules.findSchedules(function (err, schedulesArray) {
 
-        if(err) return res.status(404).json({error: 'Schedules not found'});
-
-        if (schedulesArray != null) {
-            res.status(200).json(schedulesArray);
+    schedules.getSchedulesByWeekNumber(req, function(err, schedules) {
+        if (err != null) {
+            return res.status(400).send({errors: err})
         }
+
+        return res.status(200).json(schedules)
     })
+
 })
 
-// Get schedule by id
+app.get('/schedules/week/:weekNumber?/day/:day?', function (req, res) {
+
+
+    schedules.getScheduleByWeekday(req, function(err, schedule) {
+        if (err != null) {
+            return res.status(400).send({errors: err})
+        }
+
+        return res.status(200).json(schedule)
+    })
+
+})
+
 app.get('/schedules/:id', function (req, res) {
 
     var id = req.params.id;
 
     schedules.findSchedule(id, function (err, schedule) {
 
-        if (err) {
-            return res.status(404).json({error: 'Schedule not found'});
-        }
-
         if (schedule != null) {
-            res.status(200).json(schedule);
+            res.status(200).send(schedule);
         }
-
+        else console.log('No schedule');
     })
 })
 
 // _____________________________________________________________________________________________________________________
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                  Teams
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//----------------------------------------------------------------------------------------------------------------------
 
-// Get all teams
+///////////////////////////////////////
+//            Teams
+///////////////////////////////////////
+
 app.get('/teams', function (req, res) {
     teams.findTeams(function (err, teams) {
 
@@ -142,12 +147,11 @@ app.get('/teams', function (req, res) {
             return res.status(404).json({error: 'Teams not found'});
         }
 
-        return res.status(200).json(teams)
+        res.status(200).json(teams)
 
     })
 })
 
-// Get specific team by id
 app.get('/teams/:id', function (req, res) {
 
     var id = req.params.id;
@@ -222,11 +226,16 @@ app.delete('/teams/:id', function (req, res) {
 
 
 
+
 // _____________________________________________________________________________________________________________________
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                  Holidays
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+///////////////////////////////////////
+//            Holidays
+///////////////////////////////////////
 
 app.get('/holidays', function (req, res) {
     holidays.getHolidays(function (err, holidays) {
@@ -239,4 +248,5 @@ app.get('/holidays', function (req, res) {
 
     })
 })
+
 // _____________________________________________________________________________________________________________________
