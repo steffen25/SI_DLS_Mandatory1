@@ -84,3 +84,20 @@ module.exports.createSchedule = function(req, callback) {
 
     });
 }
+
+exports.findSchedule = function (id, callback) {
+
+    Schedule.findById(id, function (err, schedule) {
+
+        // If no team was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found team!
+        if (schedule != null) {
+            callback(null, schedule)
+        }
+    });
+
+};

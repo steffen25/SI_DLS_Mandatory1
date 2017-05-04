@@ -171,6 +171,26 @@ app.post('/teams/', function (req, res) {
 
 })
 
+// Edit team schedule
+app.put('/teams/:id', function (req, res) {
+
+    var teamId = req.params.id;
+
+    var scheduleId = req.body.scheduleId;
+
+    teams.updateTeam(teamId, scheduleId, function (err, updatedTeam) {
+
+        if (err) {
+            res.status(500).json({"Internal Server error updating team": err})
+        } else {
+            res.status(201).json({"succes" : true, data: updatedTeam})
+        }
+    })
+
+})
+
+
+
 // _____________________________________________________________________________________________________________________
 
 

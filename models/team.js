@@ -16,10 +16,10 @@ const TeamSchema = new Schema({
             unique: true,
     },
     teamId: {
-        type : Number,
+        type : Schema.ObjectId,
     },
     scheduleId: {
-        type : Number,
+        type : Schema.ObjectId,
     },
     classRoom: {
         type : String,

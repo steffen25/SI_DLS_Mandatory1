@@ -4,6 +4,9 @@ var nJwt = require('njwt');
 const mongoose = require('mongoose');
 const Team = mongoose.model('Team');
 
+const schedules         = require('./schedules');
+
+
 
 // ------- CREATE -----------------//
 
@@ -26,8 +29,6 @@ exports.create = function (token, teamData, callback) {
                 var team = new Team({
                     teamName: teamData.teamName,
 
-                    teamId: teamData.teamId,
-
                     scheduleId: teamData.scheduleId,
 
                     classRoom: teamData.classRoom
@@ -47,6 +48,66 @@ exports.create = function (token, teamData, callback) {
         }
     });
 
+};
+
+exports.updateTeam = function(teamId, scheduleId, callback) {
+
+    console.log("teamid: "  + teamId);
+
+    console.log("scheduleid: "  + scheduleId);
+
+    Team.findById(teamId, function (err, team) {
+
+
+        // If no user was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found user!
+        if (team != null) {
+            console.log("found team" + team)
+
+            schedules.findSchedule(scheduleId, function (err, schedule) {
+
+                if (schedule != null) {
+
+                    console.log("FOUND SCHEDULE:" + schedule)
+
+                    team.scheduleId = scheduleId
+
+                    team.save(function (err, updatedTeam) {
+
+                        if(err) {
+                            callback(err, null)
+                        } else {
+
+                            console.log("____UPDATED TEAM")
+                            callback(null, updatedTeam)
+                        }
+                    })
+                }
+            })
+
+
+            // users.findTeam(teamId, function (err, team) {
+            //
+            //     if (team != null) {
+            //
+            //         user.teamId = teamId;
+            //
+            //         user.save(function (err, updatedUser) {
+            //
+            //             if(err) {
+            //                 callback(err, null)
+            //             } else {
+            //                 callback(null, updatedUser)
+            //             }
+            //         })
+            //     }
+            // });
+        }
+    });
 };
 
 exports.findTeam = function (id, callback) {
