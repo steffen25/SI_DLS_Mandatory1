@@ -98,7 +98,7 @@ app.post('/schedules', function (req, res) {
 app.get('/schedules/week/:weekNumber?', function (req, res) {
 
 
-    schedules.getSchedulesByWeekNumber(req.params.weekNumber, function(err, schedules) {
+    schedules.getSchedulesByWeekNumber(req, function(err, schedules) {
         if (err != null) {
             return res.status(400).send({errors: err})
         }
