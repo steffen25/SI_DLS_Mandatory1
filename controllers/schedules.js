@@ -85,6 +85,8 @@ module.exports.createSchedule = function(req, callback) {
     });
 }
 
+// ---------- GET schedule by ID -----------//
+
 exports.findSchedule = function (id, callback) {
 
     Schedule.findById(id, function (err, schedule) {
@@ -99,5 +101,24 @@ exports.findSchedule = function (id, callback) {
             callback(null, schedule)
         }
     });
+};
 
+// ---------- GET ALL schedules -----------//
+
+exports.findSchedules = function (callback) {
+
+    Schedule.find({}, function(err, schedules) {
+
+        if (err) {
+            callback(err, null)
+        } else {
+            var scheduleMap = {};
+
+            schedules.forEach(function(schedule) {
+                scheduleMap[schedule._id] = schedule;
+            });
+
+            callback(err, scheduleMap)
+        }
+    });
 };

@@ -53,7 +53,7 @@ exports.create = function (token, teamData, callback) {
 exports.updateTeam = function(teamId, scheduleId, callback) {
 
     Team.findById(teamId, function (err, team) {
-        
+
         // If no user was found
         if (err) {
             callback(err, null);
@@ -82,6 +82,9 @@ exports.updateTeam = function(teamId, scheduleId, callback) {
     });
 };
 
+
+// ---------- GET ONE SPECIFIC TEAM BY ID -----------//
+
 exports.findTeam = function (id, callback) {
 
     Team.findById(id, function (err, team) {
@@ -96,5 +99,24 @@ exports.findTeam = function (id, callback) {
             callback(null, team)
         }
     });
+};
 
+// ---------- GET ALL TEAMS -----------//
+
+exports.findTeams = function (callback) {
+
+    Team.find({}, function(err, teams) {
+
+        if (err) {
+            callback(err, null)
+        } else {
+            var teamsMap = {};
+
+            teams.forEach(function(team) {
+                teamsMap[team._id] = team;
+            });
+
+            callback(err, teamsMap)
+        }
+    });
 };
