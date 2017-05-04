@@ -256,9 +256,11 @@ exports.getScheduleByWeekday = function (req, callback) {
                                     return callback(null, scheduleDays[requestedDay - 1])
                                 })
                                 .catch(console.error);
+                        } else {
+                            return callback(null, scheduleDays[requestedDay - 1])
                         }
 
-                        return callback(null, scheduleDays[requestedDay - 1])
+
 
                     }
                 });
