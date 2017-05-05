@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Schedule = mongoose.model('Schedule');
 const Team = mongoose.model('Team');
 var weatherController = require('./weather')
+var holidayController = require('./holidays')
 
 module.exports.createSchedule = function (req, callback) {
 
@@ -173,7 +174,6 @@ exports.getScheduleByWeekday = function (req, callback) {
 
     var token = req.headers['authorization'].replace(/^JWT\s/, '');
 
-    console.log(req.params.weekNumber)
 
     nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {
@@ -227,8 +227,9 @@ exports.getScheduleByWeekday = function (req, callback) {
                         }
 
                         const today = moment();
-                        var day = weekObj.weekday(requestedDay).format("DD-MM-YYYY, dddd")
-                        scheduleDays[requestedDay - 1].date = day;
+                        var day = weekObj.weekday(requestedDay)
+                        const dayFormatted = day.format("DD-MM-YYYY, dddd")
+                        scheduleDays[requestedDay - 1].date = dayFormatted;
 
 
                         if (today.isSame(weekObj.weekday(requestedDay), 'day')) {
@@ -257,11 +258,23 @@ exports.getScheduleByWeekday = function (req, callback) {
                                 })
                                 .catch(console.error);
                         } else {
-                            return callback(null, scheduleDays[requestedDay - 1])
+
+                            var checkForHoliday = new Promise((resolve, reject) => {
+                                holidayController.findHoliday(day.format('YYYY-MM-DD'), function (err, holiday) {
+                                    if (holiday != null) {
+                                        scheduleDays[requestedDay - 1].holiday = holiday
+                                        resolve();
+                                    }
+                                    resolve();
+                                })
+                            })
+
+                            checkForHoliday
+                                .then(function () {
+                                    return callback(null, scheduleDays[requestedDay - 1])
+                                })
+                                .catch(console.error);
                         }
-
-
-
                     }
                 });
             }

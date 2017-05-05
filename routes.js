@@ -238,7 +238,7 @@ app.delete('/teams/:id', function (req, res) {
 ///////////////////////////////////////
 
 app.get('/holidays', function (req, res) {
-    holidays.getHolidays(function (err, holidays) {
+    holidays.fetchHolidays(function (err, holidays) {
 
         if (err) {
             return res.status(404).json({error: 'Error occured while fetching holidays'});

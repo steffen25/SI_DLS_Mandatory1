@@ -5,7 +5,7 @@ const Holiday = mongoose.model('Holiday');
 const moment = require('moment')
 
 
-module.exports.getHolidays = function (callback) {
+module.exports.fetchHolidays = function (callback) {
 
 var url = "http://www.kayaposoft.com/enrico/ws/v1.0/index.php?wsdl";
 
@@ -66,3 +66,21 @@ soap.createClient(url, function(err, client) {
     });
 });
 }
+
+exports.findHoliday = function (date, callback) {
+
+    Holiday.findOne({date: date}, function (err, holiday) {
+
+        // If no team was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found team!
+        if (holiday != null) {
+            callback(null, holiday)
+        }
+
+        callback({msg: "No holiday found for " + date}, null)
+    });
+};
