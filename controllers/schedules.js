@@ -156,12 +156,29 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
                         var weekObj = moment().startOf('isoWeek').week(week);
                         var scheduleDays = schedule.days;
 
-                        for (i = 0; i < scheduleDays.length; i++) {
-                            var day = weekObj.isoWeekday(i + 1).format("DD-MM-YYYY, dddd")
-                            scheduleDays[i].date = day;
-                        };
+                        var promises = scheduleDays.map(function (item, index) {
+                            return new Promise(function (resolve, reject) {
+                                var day = weekObj.isoWeekday(index + 1)
+                                const dayFormatted = day.format("DD-MM-YYYY, dddd")
 
-                        return callback(null, scheduleDays)
+                                item.date = dayFormatted;
+
+                                // Check if a given day is a holiday
+                                holidayController.findHoliday(day.format('YYYY-MM-DD'), function (err, holiday) {
+                                    if (holiday !== null) {
+                                        item.holiday = holiday
+                                        resolve();
+                                    }
+                                    resolve();
+                                })
+                            });
+                        });
+
+                        Promise.all(promises)
+                            .then(function () {
+                                callback(null, scheduleDays);
+                            })
+                            .catch(console.error);
 
                     }
                 });

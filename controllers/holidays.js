@@ -77,10 +77,10 @@ exports.findHoliday = function (date, callback) {
         }
 
         // Found team!
-        if (holiday != null) {
+        if (holiday !== null) {
             callback(null, holiday)
+        } else {
+            callback({msg: "No holiday found for " + date}, null)
         }
-
-        callback({msg: "No holiday found for " + date}, null)
     });
 };
