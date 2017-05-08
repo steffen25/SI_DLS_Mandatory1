@@ -1,4 +1,5 @@
 var nJwt = require('njwt');
+var Cookies = require('cookies')
 const moment = require('moment')
 require('../models/schedule');
 require('../models/team');
@@ -109,9 +110,13 @@ exports.findSchedule = function (id, callback) {
 
 exports.getSchedulesByWeekNumber = function (req, callback) {
 
-    var token = req.headers['authorization'].replace(/^JWT\s/, '');
+    token = null;
 
-    console.log(req.params.weekNumber)
+    if (req.headers['authorization'] !== undefined) {
+        token = req.headers['authorization'].replace(/^JWT\s/, '');
+    } else {
+        token = new Cookies(req).get('access_token').replace(/^JWT\s/, '');
+    }
 
     nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {
@@ -189,8 +194,13 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
 
 exports.getScheduleByWeekday = function (req, callback) {
 
-    var token = req.headers['authorization'].replace(/^JWT\s/, '');
+    token = null;
 
+    if (req.headers['authorization'] !== undefined) {
+        token = req.headers['authorization'].replace(/^JWT\s/, '');
+    } else {
+        token = new Cookies(req).get('access_token').replace(/^JWT\s/, '');
+    }
 
     nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {

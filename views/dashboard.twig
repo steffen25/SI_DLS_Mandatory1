@@ -1,0 +1,186 @@
+<html>
+<head>
+<title>Login</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <form class="form-horizontal" role="form">
+        <fieldset>
+
+          <!-- Form Name -->
+          <legend>My details</legend>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textinput">Firstname</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" value="{{user.firstName}}" disabled>
+            </div>
+          </div>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textinput">Lastname</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" value="{{user.lastName}}" disabled>
+            </div>
+          </div>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textinput">Email</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" value="{{user.email}}" disabled>
+            </div>
+          </div>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textinput">Phone</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" value="{{user.phone}}" disabled>
+            </div>
+          </div>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="textinput">Address</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" value="{{user.address}}" disabled>
+            </div>
+          </div>
+
+
+        </fieldset>
+      </form>
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
+<a href="/logout" class="btn btn-success">Logout</a>
+
+
+
+<div class="row">
+    <div class="col-xs-6">
+    <h2>Show schedule for day</h2>
+        <p>Day: <input type="text" id="datepicker_day"></p>
+        <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Holiday</th>
+            </tr>
+        </thead>
+        <tbody id="tBody_day">
+        </tbody>
+    </table>
+    </div>
+    
+    <div class="col-xs-6">
+    <h2>Show schedule for week</h2>
+    <p>Week: <input type="text" id="datepicker_week"></p>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Holiday</th>
+            </tr>
+        </thead>
+        <tbody id="tBody_week">
+        </tbody>
+    </table>
+    </div>
+</div>
+
+
+</div>
+  </body>
+
+<script>
+$( function() {
+
+    $( "#datepicker_day" ).datepicker({
+        showWeek: true,
+        firstDay: 1,
+        onSelect: function(dateText, inst) {
+            var date = new Date(dateText);
+            const weekNumber = $.datepicker.iso8601Week(date);
+            const dayOfWeek = date.getUTCDay() + 1;
+
+            $.get( "/schedules/week/"+weekNumber+"/day/"+dayOfWeek+"", function( data ) {
+                const schedule = data;
+                const subject = Object.keys(schedule)[0];
+
+                trHTML =
+                                    '<tr><td>'
+                                    + schedule.date
+                                    + '</td><td>'
+                                    + schedule[subject]
+                                    + '</td>';
+
+                    if(schedule.hasOwnProperty("holiday")){
+                            trHTML += '<td>'
+                                    + schedule.holiday.englishName
+                                    + '<td>';
+                    }
+                    trHTML += '</tr>';
+                $('#tBody_day').html(trHTML);
+            });
+        }
+    });
+
+
+    $( "#datepicker_week" ).datepicker({
+        showWeek: true,
+        firstDay: 1,
+        onSelect: function(dateText, inst) {
+            const weekNumber = $.datepicker.iso8601Week(new Date(dateText));
+            $(this).val(weekNumber);
+            $.get( "/schedules/week/"+weekNumber+"", function( data ) {
+                const schedules = data;
+                var trHTML = '';
+                schedules.forEach(function(schedule) {
+                    const subject = Object.keys(schedule)[0];
+
+                    trHTML +=
+                                    '<tr><td>'
+                                    + schedule.date
+                                    + '</td><td>'
+                                    + schedule[subject]
+                                    + '</td>';
+
+                    if(schedule.hasOwnProperty("holiday")){
+                            trHTML += '<td>'
+                                    + schedule.holiday.englishName
+                                    + '<td>';
+                    }
+                    trHTML += '</tr>';
+                });
+                $('#tBody_week').html(trHTML);
+            });
+        }
+    });
+  } );
+</script>
+</html>

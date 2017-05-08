@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 var fs = require('fs');
+var nJwt = require('njwt');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const User = mongoose.model('User');
@@ -51,7 +52,7 @@ exports.authenticate = function (email, password, callback) {
 
         // Email not found - for security reason response is same as when password is not right
         if (!user) {
-            return callback({error: "User not found"}, null);
+            return callback({msg: "User not found"}, null);
         }
 
         bcrypt.compare(password, user.password, function(err, matches) {
@@ -150,5 +151,21 @@ exports.findUsers = function (callback) {
 
             callback(err, usersMap)
         }
+    });
+};
+
+
+exports.dashboard = function (token, callback) {
+
+    nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
+        if (err) {
+
+            console.log(err); // Token has expired, has been tampered with, etc
+            return callback(err, null)
+
+        }
+
+        // we got a valid JWT
+        return callback(null, verifiedJwt.body._doc);
     });
 };

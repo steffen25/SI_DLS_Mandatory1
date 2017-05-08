@@ -1,5 +1,14 @@
 const express = require('express');
+var Cookies = require('cookies')
 app = express();
+// Twig setup
+app.set('view engine', 'twig');
+app.set('views', __dirname + '/views');
+
+// This section is optional and can be used to configure twig.
+app.set('twig options', { 
+    strict_variables: false
+});
 const BodyParser = require('body-parser');
 
 const users         = require('./controllers/users');
@@ -42,6 +51,39 @@ app.post('/users', function (req, res) {
     })
 })
 
+app.get('/logout', function(req, res) {
+    res.clearCookie("access_token");
+    res.redirect('/login')
+});
+
+app.get('/login', function(req, res) {
+    res.render('login');
+});
+
+app.post('/auth', function (req, res) {
+
+    var email = req.body.email;
+    var password = req.body.password;
+
+    users.authenticate(email, password, function (err, user) {
+        if (err) {
+            res.status(401);
+            res.send({
+                success: false,
+                error: err
+            });
+            return res;
+        }
+
+        new Cookies(req, res).set('access_token', user.token ,{
+                httpOnly: true
+        });
+
+        res.redirect('/dashboard')
+    })
+})
+
+
 // Login
 app.post('/login', function (req, res) {
 
@@ -61,6 +103,34 @@ app.post('/login', function (req, res) {
         return res.status(201).json({success: true, data: user});
     })
 })
+
+app.get('/dashboard', function(req, res) {
+    var token = new Cookies(req,res).get('access_token')
+    if (token === undefined) {
+        res.status(401);
+            res.send({
+                success: false,
+                error: "Unauthorized"
+            });
+
+            return res;
+    }
+
+    token = token.replace(/^JWT\s/, '');
+
+    users.dashboard(token, function(err, user) {
+        if (err != null) {
+            res.status(401);
+            res.send({
+                success: false,
+                error: err
+            });
+        }
+        res.render('dashboard', {
+            user: user
+        });
+    })
+});
 
 // Edit user team
 app.put('/users/:id', function (req, res) {
