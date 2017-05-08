@@ -89,6 +89,7 @@
                 <th>Date</th>
                 <th>Subject</th>
                 <th>Holiday</th>
+                <th>Weather</th>
             </tr>
         </thead>
         <tbody id="tBody_day">
@@ -139,10 +140,17 @@ $( function() {
                                     + schedule[subject]
                                     + '</td>';
 
-                    if(schedule.hasOwnProperty("holiday")){
+                    if(schedule.hasOwnProperty("holiday")) {
                             trHTML += '<td>'
                                     + schedule.holiday.englishName
-                                    + '<td>';
+                                    + '</td>';
+                    } else {
+                        trHTML += '<td></td>';
+                    }
+                    if(schedule.hasOwnProperty("weather")) {
+                            trHTML += '<td>'
+                                    + schedule.weather.currentTemp + '° - ' + schedule.weather.description
+                                    + '</td>';
                     }
                     trHTML += '</tr>';
                 $('#tBody_day').html(trHTML);
@@ -173,7 +181,7 @@ $( function() {
                     if(schedule.hasOwnProperty("holiday")){
                             trHTML += '<td>'
                                     + schedule.holiday.englishName
-                                    + '<td>';
+                                    + '</td>';
                     }
                     trHTML += '</tr>';
                 });
