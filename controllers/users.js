@@ -5,12 +5,13 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 const User = mongoose.model('User');
 var jwt = require('jsonwebtoken');
-const teams         = require('./teams');
+const teams = require('./teams');
+var request = require('request');
 
 /**
  * Create a user
  */
-exports.create = function(body, callback) {
+exports.create = function (body, callback) {
 
     var user = new User({
         password: body.password,
@@ -25,9 +26,9 @@ exports.create = function(body, callback) {
 
     user.save(function (err) {
         if (err) {
-            if(err.code == 11000) {
+            if (err.code == 11000) {
                 console.log("110000")
-                callback({error: "bla"}, null)
+                callback({ error: "bla" }, null)
             }
             callback(err, null);
         } else {
@@ -45,17 +46,17 @@ exports.create = function(body, callback) {
 };
 
 exports.authenticate = function (email, password, callback) {
-    User.findOne({ email: email } ).select("+password").exec(function(err, user) {
+    User.findOne({ email: email }).select("+password").exec(function (err, user) {
         if (err) {
             return callback(err, null);
         }
 
         // Email not found - for security reason response is same as when password is not right
         if (!user) {
-            return callback({msg: "User not found"}, null);
+            return callback({ msg: "User not found" }, null);
         }
 
-        bcrypt.compare(password, user.password, function(err, matches) {
+        bcrypt.compare(password, user.password, function (err, matches) {
             if (!err && matches) {
                 console.log('The password matches!');
                 // if user is found and password is right create a token
@@ -70,7 +71,7 @@ exports.authenticate = function (email, password, callback) {
                 return callback(null, data);
             }
             else
-                return callback({error: "The email or password does not match"}, null)
+                return callback({ error: "The email or password does not match" }, null)
         });
     });
 };
@@ -79,11 +80,11 @@ exports.authenticate = function (email, password, callback) {
  * Edit a users team
  */
 
-exports.updateTeam = function(userId, teamId, callback) {
+exports.updateTeam = function (userId, teamId, callback) {
 
-    console.log("userid: "  + userId);
+    console.log("userid: " + userId);
 
-    console.log("Loggiing: "  + teamId);
+    console.log("Loggiing: " + teamId);
 
     User.findById(userId, function (err, user) {
 
@@ -103,7 +104,7 @@ exports.updateTeam = function(userId, teamId, callback) {
 
                     user.save(function (err, updatedUser) {
 
-                        if(err) {
+                        if (err) {
                             callback(err, null)
                         } else {
                             callback(null, updatedUser)
@@ -138,14 +139,14 @@ exports.findUser = function (id, callback) {
 
 exports.findUsers = function (callback) {
 
-    User.find({}, function(err, users) {
+    User.find({}, function (err, users) {
 
         if (err) {
             callback(err, null)
         } else {
             var usersMap = {};
 
-            users.forEach(function(user) {
+            users.forEach(function (user) {
                 usersMap[user._id] = user;
             });
 
@@ -169,3 +170,88 @@ exports.dashboard = function (token, callback) {
         return callback(null, verifiedJwt.body._doc);
     });
 };
+
+exports.migrate = function (req, callback) {
+    var url = req.header("url");
+
+    var firstName = req.header("firstName");
+    var lastName = req.header("lastName");
+
+    var email = req.header("email");
+
+    if (url == undefined) {
+        return callback({ error: "undefined URL" }, null)
+    } else {
+        request.get(url, function (error, response, body) {
+
+            if (error) {
+                return callback({ error: error }, null)
+            } else {
+
+                const users = JSON.parse(body).data
+                var useFirstName = false;
+                var useEmail = false;
+
+                if (firstName !== undefined) {
+                    useFirstName = true;
+                }
+
+                if (email !== undefined) {
+                    useEmail = true;
+                }
+
+
+
+                var usersArr = [];
+                var promises = users.map(function (user) {
+                    return new Promise(function (resolve, reject) {
+
+                        var userObj = new User();
+
+                        if (user[firstName] !== undefined && useFirstName) {
+                            userObj.firstName = user[firstName];
+                        }
+
+                        if (user[email] !== undefined && useEmail) {
+                            userObj.email = user[email];
+                        }
+
+                        userObj.lastName = '';
+                        userObj.address = '';
+                        userObj.phone = '';
+                        userObj.teamId = null;
+                        userObj.isAdmin = false;
+                        userObj.password = "123456";
+
+                        userObj.save(function (err) {
+                            if (err) {
+                                if (err.code == 11000) {
+                                    console.log("email " + user[email] + " in use - 110000")
+                                }
+                                reject(err)
+                            } else {
+                                userObj.password = undefined;
+                                usersArr.push(userObj)
+                                resolve();
+                                console.log(userObj._id)
+                                console.log("user saved to db")
+                            }
+                        });
+
+
+                    });
+                });
+
+                Promise.all(promises)
+                    .then(function () {
+                        return callback(null, usersArr)
+                    })
+                    .catch(function (e) {
+                        console.log(e);
+                    });
+
+            }
+
+        })
+    }
+}

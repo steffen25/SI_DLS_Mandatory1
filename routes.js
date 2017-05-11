@@ -6,17 +6,14 @@ app.set('view engine', 'twig');
 app.set('views', __dirname + '/views');
 
 // This section is optional and can be used to configure twig.
-app.set('twig options', { 
+app.set('twig options', {
     strict_variables: false
 });
 const BodyParser = require('body-parser');
-var request = require('request');
-
-const users         = require('./controllers/users');
-const teams         = require('./controllers/teams');
-const schedules     =  require('./controllers/schedules');
-const holidays     =  require('./controllers/holidays');
-
+const users = require('./controllers/users');
+const teams = require('./controllers/teams');
+const schedules = require('./controllers/schedules');
+const holidays = require('./controllers/holidays');
 app.use(BodyParser.urlencoded({
     extended: true
 }));
@@ -33,35 +30,13 @@ app.use(BodyParser.json());
 
 app.get('/users/migrate', function (req, res) {
 
-
-    var url = req.header("url");
-
-    var firstName = req.header("firstName");
-    var lastName = req.header("lastName");
-
-    var email = req.header("email");
-
-    if (url == undefined) {
-        res.statusCode(500).json({error: "undefined URL"})
-    } else {
-        request.get(url, function (error, response, body) {
-
-            if (error) {
-                res.statusCode(500).json({error: error})
-            } else {
-
-                const users = body.data
-
-                users.forEach(function (user) {
-                    if (user.firstName != undefined) {
-                        console.log(user.firstName)
-                    }
-                });
-
-            }
-
-        })
+    users.migrate(req, function(error, users) {
+        if (error != null) {
+            return res.status(400).json({error: error})
         }
+
+        return res.json({success: true, users: users})
+    })
 
 })
 
@@ -83,24 +58,24 @@ app.post('/users', function (req, res) {
 
             // If the email is already in use.
             if (err.code == 11000) {
-                res.status(400).json({emailTaken: true})
+                res.status(400).json({ emailTaken: true })
             }
 
             res.status(500)
 
             // Successfull create.
         } else {
-            res.status(201).json({user: user, success: true});
+            res.status(201).json({ user: user, success: true });
         }
     })
 })
 
-app.get('/logout', function(req, res) {
+app.get('/logout', function (req, res) {
     res.clearCookie("access_token");
     res.redirect('/login')
 });
 
-app.get('/login', function(req, res) {
+app.get('/login', function (req, res) {
     res.render('login');
 });
 
@@ -119,8 +94,8 @@ app.post('/auth', function (req, res) {
             return res;
         }
 
-        new Cookies(req, res).set('access_token', user.token ,{
-                httpOnly: true
+        new Cookies(req, res).set('access_token', user.token, {
+            httpOnly: true
         });
 
         res.redirect('/dashboard')
@@ -144,25 +119,25 @@ app.post('/login', function (req, res) {
             return res;
         }
 
-        return res.status(201).json({success: true, data: user});
+        return res.status(201).json({ success: true, data: user });
     })
 })
 
-app.get('/dashboard', function(req, res) {
-    var token = new Cookies(req,res).get('access_token')
+app.get('/dashboard', function (req, res) {
+    var token = new Cookies(req, res).get('access_token')
     if (token === undefined) {
         res.status(401);
-            res.send({
-                success: false,
-                error: "Unauthorized"
-            });
+        res.send({
+            success: false,
+            error: "Unauthorized"
+        });
 
-            return res;
+        return res;
     }
 
     token = token.replace(/^JWT\s/, '');
 
-    users.dashboard(token, function(err, user) {
+    users.dashboard(token, function (err, user) {
         if (err != null) {
             res.status(401);
             res.send({
@@ -186,9 +161,9 @@ app.put('/users/:id', function (req, res) {
     users.updateTeam(userId, teamId, function (err, updatedUser) {
 
         if (err) {
-            res.status(500).json({"Internal Server error updating user": err})
+            res.status(500).json({ "Internal Server error updating user": err })
         } else {
-            res.status(201).json({"succes" : true, data: updatedUser})
+            res.status(201).json({ "succes": true, data: updatedUser })
         }
     })
 
@@ -202,7 +177,7 @@ app.post('/schedules', function (req, res) {
 
     schedules.createSchedule(req, function (err, schedule) {
         if (err != null) {
-            return res.status(400).send({errors: err})
+            return res.status(400).send({ errors: err })
         }
         return res.status(200).json(schedule)
     })
@@ -212,9 +187,9 @@ app.post('/schedules', function (req, res) {
 app.get('/schedules/week/:weekNumber?', function (req, res) {
 
 
-    schedules.getSchedulesByWeekNumber(req, function(err, schedules) {
+    schedules.getSchedulesByWeekNumber(req, function (err, schedules) {
         if (err != null) {
-            return res.status(400).send({errors: err})
+            return res.status(400).send({ errors: err })
         }
 
         return res.status(200).json(schedules)
@@ -225,9 +200,9 @@ app.get('/schedules/week/:weekNumber?', function (req, res) {
 app.get('/schedules/week/:weekNumber?/day/:day?', function (req, res) {
 
 
-    schedules.getScheduleByWeekday(req, function(err, schedule) {
+    schedules.getScheduleByWeekday(req, function (err, schedule) {
         if (err != null) {
-            return res.status(400).send({errors: err})
+            return res.status(400).send({ errors: err })
         }
 
         return res.status(200).json(schedule)
@@ -258,7 +233,7 @@ app.get('/teams', function (req, res) {
     teams.findTeams(function (err, teams) {
 
         if (err) {
-            return res.status(404).json({error: 'Teams not found'});
+            return res.status(404).json({ error: 'Teams not found' });
         }
 
         res.status(200).json(teams)
@@ -273,7 +248,7 @@ app.get('/teams/:id', function (req, res) {
     teams.findTeam(id, function (err, team) {
 
         if (err) {
-            return res.status(404).json({error: 'Team not found'});
+            return res.status(404).json({ error: 'Team not found' });
         }
 
         res.status(200).json(team)
@@ -293,11 +268,11 @@ app.post('/teams/', function (req, res) {
             console.log(err);
 
             // Not authorized / error creating team / Duplicate teamname // TODO: Send specific fejl alt afhængigt af hvad går galt.
-            return res.status(401).json({"Authorized": false});
+            return res.status(401).json({ "Authorized": false });
         } else {
 
             // Succesfully created team
-            return res.status(201).json({"Created team" : true, "Team":team});
+            return res.status(201).json({ "Created team": true, "Team": team });
         }
     })
 
@@ -313,9 +288,9 @@ app.put('/teams/:id', function (req, res) {
     teams.updateTeam(teamId, scheduleId, function (err, updatedTeam) {
 
         if (err) {
-            res.status(500).json({"Internal Server error updating team": err})
+            res.status(500).json({ "Internal Server error updating team": err })
         } else {
-            res.status(201).json({"succes" : true, data: updatedTeam})
+            res.status(201).json({ "succes": true, data: updatedTeam })
         }
     })
 
@@ -330,7 +305,7 @@ app.delete('/teams/:id', function (req, res) {
     teams.deleteTeam(teamId, function (err, success) {
 
         if (err) {
-            return res.status(500).json({"Internal Server error deleting team": err})
+            return res.status(500).json({ "Internal Server error deleting team": err })
         } else {
             return res.status(200).json(success)
         }
@@ -355,7 +330,7 @@ app.get('/holidays', function (req, res) {
     holidays.fetchHolidays(function (err, holidays) {
 
         if (err) {
-            return res.status(404).json({error: 'Error occured while fetching holidays'});
+            return res.status(404).json({ error: 'Error occured while fetching holidays' });
         }
 
         res.status(200).json(holidays)
