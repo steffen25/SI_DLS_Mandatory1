@@ -10,6 +10,7 @@ app.set('twig options', {
     strict_variables: false
 });
 const BodyParser = require('body-parser');
+var request = require('request');
 
 const users         = require('./controllers/users');
 const teams         = require('./controllers/teams');
@@ -23,6 +24,49 @@ app.use(BodyParser.urlencoded({
 app.use(BodyParser.json());
 
 // _____________________________________________________________________________________________________________________
+
+
+///////////////////////////////////////
+//            User Migration
+///////////////////////////////////////
+
+
+app.get('/users/migrate', function (req, res) {
+
+
+    var url = req.header("url");
+
+    var firstName = req.header("firstName");
+    var lastName = req.header("lastName");
+
+    var email = req.header("email");
+
+    if (url == undefined) {
+        res.statusCode(500).json({error: "undefined URL"})
+    } else {
+        request.get(url, function (error, response, body) {
+
+            if (error) {
+                res.statusCode(500).json({error: error})
+            } else {
+
+                const users = body.data
+
+                users.forEach(function (user) {
+                    if (user.firstName != undefined) {
+                        console.log(user.firstName)
+                    }
+                });
+
+            }
+
+        })
+        }
+
+})
+
+
+
 
 
 ///////////////////////////////////////
