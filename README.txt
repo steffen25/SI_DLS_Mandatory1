@@ -27,30 +27,3 @@ ________________________________________________________
 
 Access the webservice with your browser/Postman. 
 The application runs on Port 4000 and returns data in JSON format. 
-All requests are GET requests.
-
-	1. Get all users:
-	localhost:4000/users/
-
-	2. Get user by id:
-	localhost:4000/users/1
-
-		1. Get all teams:
-	localhost:4000/teams/
-
-	2. Get team by id:
-	localhost:4000/teams/1
-
-		1. Get all schedules:
-	localhost:4000/schedules/
-
-	2. Get user by id:
-	localhost:4000/schedules/1
-
-
-
-
-
-
-
-
