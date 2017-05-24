@@ -1,0 +1,232 @@
+{
+	"variables": [],
+	"info": {
+		"name": "SI_DLS - Exam",
+		"_postman_id": "1e062894-3345-0750-56e4-a607f04ed9d0",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create USER",
+			"request": {
+				"url": "http://localhost:4000/users/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"password\" : \"123456\",\n        \"email\" : \"anemail@kea.dk\",\n        \"firstName\" : \"Aldo\",\n        \"lastName\" : \"Doe\",\n        \"address\" : \"Street 2\",\n        \"phone\" : \"12345678\",\n        \"teamId\" : 1,\n        \"isAdmin\" : true\n\t\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"url": "http://localhost:4000/login/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "email",
+							"value": "anemail@kea.dk",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Team",
+			"request": {
+				"url": "http://localhost:4000/teams/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsiaXNBZG1pbiI6ImluaXQiLCJjcmVhdGVkQXQiOiJpbml0IiwiX192IjoiaW5pdCIsInRlYW1JZCI6ImluaXQiLCJwaG9uZSI6ImluaXQiLCJhZGRyZXNzIjoiaW5pdCIsImxhc3ROYW1lIjoiaW5pdCIsImZpcnN0TmFtZSI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJwYXNzd29yZCI6Im1vZGlmeSIsIl9pZCI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9fdiI6dHJ1ZSwiaXNBZG1pbiI6dHJ1ZSwiY3JlYXRlZEF0Ijp0cnVlLCJ0ZWFtSWQiOnRydWUsInBob25lIjp0cnVlLCJhZGRyZXNzIjp0cnVlLCJsYXN0TmFtZSI6dHJ1ZSwiZmlyc3ROYW1lIjp0cnVlLCJlbWFpbCI6dHJ1ZSwiX2lkIjp0cnVlfSwibW9kaWZ5Ijp7InBhc3N3b3JkIjp0cnVlfSwicmVxdWlyZSI6e319LCJzdGF0ZU5hbWVzIjpbInJlcXVpcmUiLCJtb2RpZnkiLCJpbml0IiwiZGVmYXVsdCIsImlnbm9yZSJdfSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9fSwiaXNOZXciOmZhbHNlLCJfZG9jIjp7ImlzQWRtaW4iOnRydWUsImNyZWF0ZWRBdCI6IjIwMTctMDUtMDFUMDk6NTM6MTMuMjIyWiIsIl9fdiI6MCwidGVhbUlkIjoiNTkwNzI1ODYwNDliYmYxMDk3OTFiYzlmIiwicGhvbmUiOiIxMjM0NTY3OCIsImFkZHJlc3MiOiJTdHJlZXQgMiIsImxhc3ROYW1lIjoiRG9lIiwiZmlyc3ROYW1lIjoiQWxkbyIsImVtYWlsIjoiYW5lbWFpbEBrZWEuZGsiLCJfaWQiOiI1OTA3MDU4OTNkZjRkOTBjZGE2ZTE0ZDQifSwiaWF0IjoxNDkzODg4MTc5fQ.RGaHojJvRibh12ML64QDqAbqBIrtcXrh1lIUfK8_NXc\"",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"teamName\" : \"Team Rocket\",\n    \"scheduleId\" : \"58fde162c5270ef459fd4d6d\",\n    \"classRoom\" : \"A14\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get holidays",
+			"request": {
+				"url": "http://localhost:4000/holidays/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Edit team for user ",
+			"request": {
+				"url": "http://localhost:4000/users/590705893df4d90cda6e14d4",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"teamId\": \"590aeda985d6a027d231152c\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Edit schedule for team",
+			"request": {
+				"url": "http://localhost:4000/teams/590af0a71f4e262f55f82f49",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"scheduleId\": \"590aefbb1f4e262f55f82f48\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create schedule",
+			"request": {
+				"url": "http://localhost:4000/schedules/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsiaXNBZG1pbiI6ImluaXQiLCJjcmVhdGVkQXQiOiJpbml0IiwiX192IjoiaW5pdCIsInRlYW1JZCI6ImluaXQiLCJwaG9uZSI6ImluaXQiLCJhZGRyZXNzIjoiaW5pdCIsImxhc3ROYW1lIjoiaW5pdCIsImZpcnN0TmFtZSI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJwYXNzd29yZCI6Im1vZGlmeSIsIl9pZCI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9fdiI6dHJ1ZSwiaXNBZG1pbiI6dHJ1ZSwiY3JlYXRlZEF0Ijp0cnVlLCJ0ZWFtSWQiOnRydWUsInBob25lIjp0cnVlLCJhZGRyZXNzIjp0cnVlLCJsYXN0TmFtZSI6dHJ1ZSwiZmlyc3ROYW1lIjp0cnVlLCJlbWFpbCI6dHJ1ZSwiX2lkIjp0cnVlfSwibW9kaWZ5Ijp7InBhc3N3b3JkIjp0cnVlfSwicmVxdWlyZSI6e319LCJzdGF0ZU5hbWVzIjpbInJlcXVpcmUiLCJtb2RpZnkiLCJpbml0IiwiZGVmYXVsdCIsImlnbm9yZSJdfSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9fSwiaXNOZXciOmZhbHNlLCJfZG9jIjp7ImlzQWRtaW4iOnRydWUsImNyZWF0ZWRBdCI6IjIwMTctMDUtMDFUMDk6NTM6MTMuMjIyWiIsIl9fdiI6MCwidGVhbUlkIjoiNTkwNzI1ODYwNDliYmYxMDk3OTFiYzlmIiwicGhvbmUiOiIxMjM0NTY3OCIsImFkZHJlc3MiOiJTdHJlZXQgMiIsImxhc3ROYW1lIjoiRG9lIiwiZmlyc3ROYW1lIjoiQWxkbyIsImVtYWlsIjoiYW5lbWFpbEBrZWEuZGsiLCJfaWQiOiI1OTA3MDU4OTNkZjRkOTBjZGE2ZTE0ZDQifSwiaWF0IjoxNDkzODg4MTc5fQ.RGaHojJvRibh12ML64QDqAbqBIrtcXrh1lIUfK8_NXc\"",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"monday\": \"1\",\n\t\"tuesday\": \"2\",\n\t\"wednesday\": \"3\",\n\t\"thursday\": \"4\",\n\t\"friday\": \"5\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get schedules by weekday",
+			"request": {
+				"url": "http://localhost:4000/schedules/week/20/day/1",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsiaXNBZG1pbiI6ImluaXQiLCJjcmVhdGVkQXQiOiJpbml0IiwiX192IjoiaW5pdCIsInRlYW1JZCI6ImluaXQiLCJwaG9uZSI6ImluaXQiLCJhZGRyZXNzIjoiaW5pdCIsImxhc3ROYW1lIjoiaW5pdCIsImZpcnN0TmFtZSI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJwYXNzd29yZCI6Im1vZGlmeSIsIl9pZCI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9fdiI6dHJ1ZSwiaXNBZG1pbiI6dHJ1ZSwiY3JlYXRlZEF0Ijp0cnVlLCJ0ZWFtSWQiOnRydWUsInBob25lIjp0cnVlLCJhZGRyZXNzIjp0cnVlLCJsYXN0TmFtZSI6dHJ1ZSwiZmlyc3ROYW1lIjp0cnVlLCJlbWFpbCI6dHJ1ZSwiX2lkIjp0cnVlfSwibW9kaWZ5Ijp7InBhc3N3b3JkIjp0cnVlfSwicmVxdWlyZSI6e319LCJzdGF0ZU5hbWVzIjpbInJlcXVpcmUiLCJtb2RpZnkiLCJpbml0IiwiZGVmYXVsdCIsImlnbm9yZSJdfSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9fSwiaXNOZXciOmZhbHNlLCJfZG9jIjp7ImlzQWRtaW4iOnRydWUsImNyZWF0ZWRBdCI6IjIwMTctMDUtMDRUMTI6NDU6MTEuMDc4WiIsIl9fdiI6MCwidGVhbUlkIjoiNTkwYjIyNGFkMjRkZDQzYWEwYTQ5MjZjIiwicGhvbmUiOiIxMjM0NTY3OCIsImFkZHJlc3MiOiJTdHJlZXQgMiIsImxhc3ROYW1lIjoiRG9lIiwiZmlyc3ROYW1lIjoiQWxkbyIsImVtYWlsIjoic3RlZmZlbkBrZWEuZGsiLCJfaWQiOiI1OTBiMjI1N2QyNGRkNDNhYTBhNDkyNmQifSwiaWF0IjoxNDk0ODM4MDI5fQ.tXHyWpc9_xWp4q71sSkNehSpzkKSy6ERJ3EE_rBE0xg",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get schedules by week number",
+			"request": {
+				"url": "http://localhost:4000/schedules/week/20",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsiaXNBZG1pbiI6ImluaXQiLCJjcmVhdGVkQXQiOiJpbml0IiwiX192IjoiaW5pdCIsInRlYW1JZCI6ImluaXQiLCJwaG9uZSI6ImluaXQiLCJhZGRyZXNzIjoiaW5pdCIsImxhc3ROYW1lIjoiaW5pdCIsImZpcnN0TmFtZSI6ImluaXQiLCJlbWFpbCI6ImluaXQiLCJwYXNzd29yZCI6Im1vZGlmeSIsIl9pZCI6ImluaXQifSwic3RhdGVzIjp7Imlnbm9yZSI6e30sImRlZmF1bHQiOnt9LCJpbml0Ijp7Il9fdiI6dHJ1ZSwiaXNBZG1pbiI6dHJ1ZSwiY3JlYXRlZEF0Ijp0cnVlLCJ0ZWFtSWQiOnRydWUsInBob25lIjp0cnVlLCJhZGRyZXNzIjp0cnVlLCJsYXN0TmFtZSI6dHJ1ZSwiZmlyc3ROYW1lIjp0cnVlLCJlbWFpbCI6dHJ1ZSwiX2lkIjp0cnVlfSwibW9kaWZ5Ijp7InBhc3N3b3JkIjp0cnVlfSwicmVxdWlyZSI6e319LCJzdGF0ZU5hbWVzIjpbInJlcXVpcmUiLCJtb2RpZnkiLCJpbml0IiwiZGVmYXVsdCIsImlnbm9yZSJdfSwiZW1pdHRlciI6eyJkb21haW4iOm51bGwsIl9ldmVudHMiOnt9LCJfZXZlbnRzQ291bnQiOjAsIl9tYXhMaXN0ZW5lcnMiOjB9fSwiaXNOZXciOmZhbHNlLCJfZG9jIjp7ImlzQWRtaW4iOnRydWUsImNyZWF0ZWRBdCI6IjIwMTctMDUtMDRUMTI6NDU6MTEuMDc4WiIsIl9fdiI6MCwidGVhbUlkIjoiNTkwYjIyNGFkMjRkZDQzYWEwYTQ5MjZjIiwicGhvbmUiOiIxMjM0NTY3OCIsImFkZHJlc3MiOiJTdHJlZXQgMiIsImxhc3ROYW1lIjoiRG9lIiwiZmlyc3ROYW1lIjoiQWxkbyIsImVtYWlsIjoic3RlZmZlbkBrZWEuZGsiLCJfaWQiOiI1OTBiMjI1N2QyNGRkNDNhYTBhNDkyNmQifSwiaWF0IjoxNDk0ODM4MDI5fQ.tXHyWpc9_xWp4q71sSkNehSpzkKSy6ERJ3EE_rBE0xg",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Migrate users",
+			"request": {
+				"url": "http://localhost:4000/login/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "email",
+							"value": "anemail@kea.dk",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
