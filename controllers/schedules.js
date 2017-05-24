@@ -95,12 +95,12 @@ exports.findSchedule = function (id, callback) {
 
     Schedule.findById(id, function (err, schedule) {
 
-        // If no team was found
+        // If no schedule was found
         if (err) {
             callback(err, null);
         }
 
-        // Found team!
+        // Found schedule!
         if (schedule != null) {
             callback(null, schedule)
         }
@@ -151,7 +151,7 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
                         return callback({ msg: "Team doesnt have a schedule id" }, null)
                     }
 
-                    // Found team!
+                    // Found schedule!
                     if (schedule != null) {
                         var week = moment().format('W');
                         if (req.params.weekNumber) {
@@ -235,7 +235,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                         return callback({ msg: "Team doesnt have a schedule id" }, null)
                     }
 
-                    // Found team!
+                    // Found schedule!
                     if (schedule != null) {
                         var week = moment().format('W');
                         if (req.params.weekNumber) {

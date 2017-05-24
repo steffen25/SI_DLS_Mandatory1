@@ -35,13 +35,6 @@ exports.create = function (body, callback) {
             user.password = undefined;
             callback(null, user)
         }
-
-        // TODO : Fix ordentlig måde at håndtere fx fejl ved oprettelse
-        // saved!
-        // res.json({
-        //     success: true,
-        //     data: user
-        // });
     });
 };
 
