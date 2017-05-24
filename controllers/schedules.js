@@ -127,7 +127,7 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
         }
 
         var teamId = verifiedJwt.body._doc.teamId
-        console.log(teamId)
+
         Team.findById(teamId, function (err, team) {
 
             // If no team was found
@@ -253,7 +253,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                             return callback({ msg: requestedDay + " does not exist" })
                         }
 
-                        const today = moment();
+                        var today = moment();
                         var day = weekObj.weekday(requestedDay)
                         const dayFormatted = day.format("DD-MM-YYYY, dddd")
                         scheduleDays[requestedDay - 1].date = dayFormatted;
@@ -264,6 +264,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                                 weatherController.getCurrentWeather(function (err, weatherData) {
                                     if (err) {
                                         console.log("Error getting weather: " + err)
+                                        reject(err);
                                     } else {
                                         const currentTemp = weatherData.currentTemp;
                                         const description = weatherData.description;
@@ -281,7 +282,20 @@ exports.getScheduleByWeekday = function (req, callback) {
 
                             getWeather
                                 .then(function () {
-                                    return callback(null, scheduleDays[requestedDay - 1])
+                                    var checkForHoliday = new Promise((resolve, reject) => {
+                                        holidayController.findHoliday(day.format('YYYY-MM-DD'), function (err, holiday) {
+                                            if (holiday != null) {
+                                                scheduleDays[requestedDay - 1].holiday = holiday
+                                                resolve();
+                                            }
+                                            resolve();
+                                        })
+                                    })
+                                    checkForHoliday
+                                        .then(function () {
+                                            return callback(null, scheduleDays[requestedDay - 1])
+                                        })
+                                        .catch(console.error);
                                 })
                                 .catch(console.error);
                         } else {
