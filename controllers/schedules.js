@@ -253,7 +253,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                             return callback({ msg: requestedDay + " does not exist" })
                         }
 
-                        var today = moment();
+                        const today = moment();
                         var day = weekObj.weekday(requestedDay)
                         const dayFormatted = day.format("DD-MM-YYYY, dddd")
                         scheduleDays[requestedDay - 1].date = dayFormatted;
