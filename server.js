@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 
 //Set up default mongoose connection
 
-var mongoDB = 'mongodb://localhost/scheduleapp';
+var mongoDB = 'mongodb://thomasmlab:thomasmlab4@ds111066.mlab.com:11066/keaschedule';
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB);
 
