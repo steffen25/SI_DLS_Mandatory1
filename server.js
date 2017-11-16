@@ -39,4 +39,4 @@ weatherController.getCurrentWeather(function (err, weatherData) {
     }
 })
 
-app.listen(4000);
+app.listen(process.ent.PORT || 4000);
