@@ -14,6 +14,7 @@ const users = require('./controllers/users');
 const teams = require('./controllers/teams');
 const schedules = require('./controllers/schedules');
 const holidays = require('./controllers/holidays');
+const cancellations = require('./controllers/cancellations');
 app.use(BodyParser.urlencoded({
     extended: true
 }));
@@ -337,3 +338,29 @@ app.get('/holidays', function (req, res) {
 })
 
 // _____________________________________________________________________________________________________________________
+
+
+
+///////////////////////////////////////
+//            Cancellation
+///////////////////////////////////////
+
+// Create cancellation
+app.post('/cancellations', function (req, res) {
+
+    var token = req.headers['authorization'].replace(/^JWT\s/, '');
+    var cancellationData = req.body
+
+
+    cancellations.create(token, cancellationData, function (err, cancellation) {
+
+        if (err) {
+            console.log(err);
+            // Not authorized / error creating cancellation
+            return res.status(401).json({ "Authorized": false });
+        } else {
+            return res.status(201).json({ "Created cancellation": true, "Cancellation": cancellation });
+        }
+
+    })
+})

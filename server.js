@@ -7,6 +7,7 @@ app = express();
 require('./config/passport')(passport)
 require('./models/user');
 require('./models/team');
+require('./models/cancellation');
 
 app.get('/', function (req, res) {
     res.send('Hello World!')
