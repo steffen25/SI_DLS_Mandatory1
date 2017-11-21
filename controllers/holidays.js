@@ -61,8 +61,6 @@ soap.createClient(url, function(err, client) {
                      callback(null, holidaysArr); 
                     })
                 .catch(console.error);
-
-        
     });
 });
 }

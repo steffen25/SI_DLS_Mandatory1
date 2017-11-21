@@ -55,12 +55,12 @@ exports.updateTeam = function (teamId, scheduleId, callback) {
 
     Team.findById(teamId, function (err, team) {
 
-        // If no user was found
+        // If no team was found
         if (err) {
             callback(err, null);
         }
 
-        // Found user!
+        // Found team!
         if (team != null) {
 
             schedules.findSchedule(scheduleId, function (err, schedule) {
