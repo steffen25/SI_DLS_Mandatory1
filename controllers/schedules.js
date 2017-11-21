@@ -8,6 +8,7 @@ const Schedule = mongoose.model('Schedule');
 const Team = mongoose.model('Team');
 var weatherController = require('./weather')
 var holidayController = require('./holidays')
+var cancellationController = require('./cancellations')
 
 module.exports.createSchedule = function (req, callback) {
 
@@ -159,7 +160,26 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
                         }
 
                         var weekObj = moment().startOf('isoWeek').week(week);
+                        var weekStartDate = weekObj.isoWeekday(1).format();
+                        var weekEndDate = weekObj.isoWeekday(5).format()
                         var scheduleDays = schedule.days;
+                        var weekDates = enumerateDaysBetweenDates(weekStartDate, weekEndDate)
+                        
+
+                        cancellationController.findCancellations(teamId, weekDates, function(err, cancellations) {
+                            if (err) {
+                                console.log("Error could not fetch cancellations", err)
+                                return;
+                            }
+
+                            if (cancellations.length > 0) {
+                                for (i = 0; i < cancellations.length; i++) { 
+                                    scheduleDays[i].cancellation = cancellations[i];
+                                }
+                            }
+
+                        });
+
 
                         var promises = scheduleDays.map(function (item, index) {
                             return new Promise(function (resolve, reject) {
@@ -259,7 +279,24 @@ exports.getScheduleByWeekday = function (req, callback) {
                         scheduleDays[requestedDay - 1].date = dayFormatted;
 
 
+
                         if (today.isSame(weekObj.weekday(requestedDay), 'day')) {
+
+
+                            cancellationController.findCancellations(teamId, [day.add(1, 'hours').toISOString()], function(err, cancellations) {
+                                if (err) {
+                                    console.log("Error could not fetch cancellations", err)
+                                    return;
+                                }
+
+                                if (cancellations.length > 0) {
+                                    scheduleDays[requestedDay - 1].cancellation = cancellations[0]
+                                }
+    
+                            });
+
+
+                            
                             var getWeather = new Promise((resolve, reject) => {
                                 weatherController.getCurrentWeather(function (err, weatherData) {
                                     if (err) {
@@ -300,6 +337,18 @@ exports.getScheduleByWeekday = function (req, callback) {
                                 .catch(console.error);
                         } else {
 
+                            cancellationController.findCancellations(teamId, [day.add(1, 'hours').toISOString()], function(err, cancellations) {
+                                if (err) {
+                                    console.log("Error could not fetch cancellations", err)
+                                    return;
+                                }
+
+                                if (cancellations.length > 0) {
+                                    scheduleDays[requestedDay - 1].cancellation = cancellations[0]
+                                }
+    
+                            });
+
                             var checkForHoliday = new Promise((resolve, reject) => {
                                 holidayController.findHoliday(day.format('YYYY-MM-DD'), function (err, holiday) {
                                     if (holiday != null) {
@@ -321,4 +370,17 @@ exports.getScheduleByWeekday = function (req, callback) {
             }
         });
     });
+};
+
+function enumerateDaysBetweenDates(startDate, endDate) {
+    startDate = moment(startDate);
+    endDate = moment(endDate);
+
+    var now = startDate, dates = [];
+
+    while (now.isBefore(endDate) || now.isSame(endDate)) {
+        dates.push(now.format('YYYY-MM-DD'));
+        now.add(1, 'days');
+    }
+    return dates;
 };

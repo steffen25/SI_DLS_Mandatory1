@@ -61,12 +61,10 @@ exports.create = function (token, cancellationData, callback) {
     });
 };
 
-// ---------- GET CANCELLATION BY SPECIFIC ID  -----------//
+// ---------- FIND CANCELLATIONs BY SPECIFIC TEAM ID AND DATES  -----------//
 
-exports.findCancellation = function (teamId, callback) {
-
-
-    Cancellation.find( { teamId: { $eq: teamId } }, function (err, cancellation) {
+exports.findCancellations = function (teamId, dates, callback) {
+    Cancellation.find( { teamId: { $eq: teamId }, date: {$in: dates} }, function (err, cancellations) {
 
         // If no cancellation was found
         if (err) {
@@ -74,8 +72,8 @@ exports.findCancellation = function (teamId, callback) {
         }
 
         // Found user!
-        if (cancellation != null) {
-            callback(null, cancellation)
+        if (cancellations != null) {
+            callback(null, cancellations)
         }
-    });
+    }).sort({date: 1});
 };
