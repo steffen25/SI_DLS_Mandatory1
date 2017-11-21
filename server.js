@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 const fs       = require('fs');
 const passport = require('passport');
@@ -14,7 +15,7 @@ app.get('/', function (req, res) {
 
 //Set up default mongoose connection
 
-var mongoDB = 'mongodb://thomasmlab:thomasmlab4@ds111066.mlab.com:11066/keaschedule';
+var mongoDB = 'mongodb://'+process.env.DB_USER+':'+process.env.DB_PASS+'@'+process.env.DB_HOST+':'+process.env.DB_PORT+'/'+process.env.DB_NAME+'';
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB);
 
