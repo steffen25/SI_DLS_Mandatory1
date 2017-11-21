@@ -60,3 +60,22 @@ exports.create = function (token, cancellationData, callback) {
         }
     });
 };
+
+// ---------- GET CANCELLATION BY SPECIFIC ID  -----------//
+
+exports.findCancellation = function (teamId, callback) {
+
+
+    Cancellation.find( { teamId: { $eq: teamId } }, function (err, cancellation) {
+
+        // If no cancellation was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found user!
+        if (cancellation != null) {
+            callback(null, cancellation)
+        }
+    });
+};
