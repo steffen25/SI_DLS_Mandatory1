@@ -364,3 +364,17 @@ app.post('/cancellations', function (req, res) {
 
     })
 })
+
+//  FIND ALL CANCELLATIONS
+
+app.get('/cancellations', function (req, res) {
+    cancellations.findAllCancellations(function (err, cancellations) {
+
+        if (err) {
+            return res.status(404).json({ error: 'No cancellations found' });
+        }
+
+        res.status(200).json(cancellations)
+
+    })
+})

@@ -77,3 +77,23 @@ exports.findCancellations = function (teamId, dates, callback) {
         }
     }).sort({date: 1});
 };
+
+// ---------- FIND ALL CANCELLATIONS  -----------//
+
+exports.findAllCancellations = function (callback) {
+
+    Cancellation.find({}, function (err, cancellations) {
+
+        if (err) {
+            callback(err, null)
+        } else {
+            var cancellationsMap = {};
+
+            cancellations.forEach(function (cancellation) {
+                cancellationsMap[cancellation._id] = cancellation;
+            });
+
+            callback(err, cancellationsMap)
+        }
+    });
+};
