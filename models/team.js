@@ -28,5 +28,3 @@ const TeamSchema = new Schema({
 });
 
 mongoose.model('Team', TeamSchema);
-
-console.log("Loaded team class")
