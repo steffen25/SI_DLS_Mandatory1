@@ -32,7 +32,7 @@ describe('/GET users', () => {
                 res.body.should.be.a('object');
                 res.body.data.should.be.an('object');
                 res.body.data.users.should.be.a('array');
-                //res.body.data.users.length.should.be.eql(0);
+                res.body.data.users.length.should.be.eql(0);
                 done();
             });
     });
@@ -139,7 +139,7 @@ describe('/GET users should return 1 user', () => {
                 res.body.data.should.be.an('object');
                 res.body.data.users.should.be.a('array');
                 // 1 user has been created above
-                //res.body.data.users.length.should.be.eql(1);
+                res.body.data.users.length.should.be.eql(1);
                 done();
             });
     });
@@ -232,7 +232,7 @@ describe('/GET users', () => {
                 res.body.should.be.a('object');
                 res.body.data.should.be.an('object');
                 res.body.data.users.should.be.a('array');
-                //res.body.data.users.length.should.be.eql(2);
+                res.body.data.users.length.should.be.eql(2);
                 done();
             });
     });
