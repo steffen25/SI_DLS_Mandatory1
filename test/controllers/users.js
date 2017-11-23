@@ -70,18 +70,18 @@ describe('/POST user', () => {
 // Test for ensuring that a user and a proper status code is returned when an existing user id is provided.
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-describe('/GET user with id', () => {
-    it('it should GET the user with a specific id', (done) => {
-        chai.request(api)
-            .get('/users/5a0d64fcb1bc250014b36c2d')
-            .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-        //res.body.length.should.be.eql(8);
-        done();
-        });
-    });
-});
+// describe('/GET user with id', () => {
+//     it('it should GET the user with a specific id', (done) => {
+//         chai.request(api)
+//             .get('/users/5a0d64fcb1bc250014b36c2d')
+//             .end((err, res) => {
+//             res.should.have.status(200);
+//             res.body.should.be.a('object');
+//         //res.body.length.should.be.eql(8);
+//         done();
+//         });
+//     });
+// });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // Test for ensuring that a valid error is returned to the user, when a nonexistant user id is provided.

@@ -4,7 +4,7 @@
   "description": "node",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --recursive",
+    "test": "mocha --recursive --exit",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive --exit",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls"
   },
