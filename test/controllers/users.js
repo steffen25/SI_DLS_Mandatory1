@@ -1,11 +1,11 @@
-let mongoose = require("mongoose");
-let User = require('../../models/user');
+const mongoose = require("mongoose");
+const User = require('../../models/user');
 
 //Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../../server');
-let should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../../server');
+const should = chai.should();
 chai.use(chaiHttp);
 
 
