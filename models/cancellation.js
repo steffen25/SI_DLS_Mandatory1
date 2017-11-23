@@ -20,5 +20,3 @@ const CancellationSchema = new Schema({
 });
 
 mongoose.model('Cancellation', CancellationSchema);
-
-console.log("Loaded cancellation class")

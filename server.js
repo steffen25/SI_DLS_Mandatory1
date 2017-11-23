@@ -26,20 +26,7 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
 var routes = require('./routes');
-
-var weatherController = require('./controllers/weather')
-
-// Delete this when it has been implemented 
-weatherController.getCurrentWeather(function (err, weatherData) {
-
-    if (err) {
-        console.log("Error getting weather: " + err)
-    } else {
-        console.log("Current temp" + weatherData.currentTemp + "\nDescription: " + weatherData.description)
-    }
-})
 
 app.listen(process.env.PORT || 4000);
 

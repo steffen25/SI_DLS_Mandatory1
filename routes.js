@@ -183,6 +183,25 @@ app.get('/users', function (req, res) {
     })
 })
 
+//  FIND USERS
+
+app.get('/users/:id', function (req, res) {
+
+    var userId = req.params.id;
+
+    users.findUser(userId, function (err, user) {
+
+        if (err) {
+            return res.status(404).json({ error: 'No user with that id found' });
+        }
+
+        res.status(200).json(user)
+
+    })
+})
+
+
+
 // _____________________________________________________________________________________________________________________
 
 ///////////////////////////////////////
