@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha --recursive",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive --exit",
+    "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -45,6 +45,7 @@
   "devDependencies": {
     "coveralls": "^3.0.0",
     "istanbul": "^0.4.5",
-    "mocha-lcov-reporter": "^1.3.0"
+    "mocha-lcov-reporter": "^1.3.0",
+    "supertest": "^3.0.0"
   }
 }

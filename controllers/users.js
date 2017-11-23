@@ -129,17 +129,10 @@ exports.findUsers = function (callback) {
     User.find({}, function (err, users) {
 
         if (err) {
-            callback(err, null)
-        } else {
-
-            // var usersMap = [];
-
-            // users.forEach(function (user) {
-            //     usersMap[user._id] = user;
-            // });
-
-            callback(err, users)
+            return callback(err, null)
         }
+
+        callback(err, users)
     });
 };
 
@@ -215,8 +208,6 @@ exports.migrate = function (req, callback) {
                                 userObj.password = undefined;
                                 usersArr.push(userObj)
                                 resolve();
-                                console.log(userObj._id)
-                                console.log("user saved to db")
                             }
                         });
 
