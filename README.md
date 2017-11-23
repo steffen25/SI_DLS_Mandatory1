@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/steffen25/SI_DLS_Mandatory1.svg?branch=master)](https://travis-ci.org/steffen25/SI_DLS_Mandatory1)
+[![Coverage Status](https://coveralls.io/repos/github/steffen25/SI_DLS_Mandatory1/badge.svg?branch=master)](https://coveralls.io/github/steffen25/SI_DLS_Mandatory1?branch=master)
+
 Made by: Steffen Thomsen - Thomas Attermann 
 ________________________________________________________
 
