@@ -57,6 +57,74 @@ describe('/GET user with incorrect id', () => {
 });
 
 
+describe('/POST user', () => {
+    it('it should POST a user ', (done) => {
+
+        var uuid = require("uuid");
+        var id = uuid.v4();
+
+        var user = {
+            password : "123456",
+            email: "alison"+id+"@kea.dk",
+            firstName: "Alison",
+            lastName: "Johnson",
+            address: "Street 2",
+            phone:"12345678",
+            teamId: null,
+            isAdmin: true
+        }
+        chai.request(server)
+            .post('/users')
+            .send(user)
+            .end((err, res) => {
+                res.should.have.status(201);
+                res.body.should.be.a('object');
+                res.body.should.have.property('user')
+                res.body.user.should.have.property('email');
+                res.body.user.should.have.property('firstName');
+                res.body.user.should.have.property('lastName');
+                res.body.user.should.have.property('address');
+                res.body.user.should.have.property('phone');
+                done();
+            });
+    });
+});
+
+describe('/POST user', () => {
+    it('it should POST a user ', (done) => {
+
+        var uuid = require("uuid");
+        var id = uuid.v4();
+
+        var user = {
+            password : "123456",
+            email: "alison"+id+"@kea.dk",
+            firstName: "Alison",
+            lastName: "Johnson",
+            address: "Street 2",
+            phone:"12345678",
+            teamId: null,
+            isAdmin: true
+        }
+        chai.request(server)
+            .post('/users')
+            .send(user)
+            .end((err, res) => {
+                res.should.have.status(201);
+                res.body.should.be.a('object');
+                res.body.should.have.property('user')
+                res.body.user.should.have.property('email');
+                res.body.user.should.have.property('firstName');
+                res.body.user.should.have.property('lastName');
+                res.body.user.should.have.property('address');
+                res.body.user.should.have.property('phone');
+                done();
+            });
+    });
+});
+
+
+
 
 
 
