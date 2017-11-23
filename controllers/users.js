@@ -137,13 +137,14 @@ exports.findUsers = function (callback) {
         if (err) {
             callback(err, null)
         } else {
-            var usersMap = {};
 
-            users.forEach(function (user) {
-                usersMap[user._id] = user;
-            });
+            // var usersMap = [];
 
-            callback(err, usersMap)
+            // users.forEach(function (user) {
+            //     usersMap[user._id] = user;
+            // });
+
+            callback(err, users)
         }
     });
 };
