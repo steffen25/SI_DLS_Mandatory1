@@ -72,5 +72,3 @@ UserSchema.pre('save', function (next) {
 });
 
 mongoose.model('User', UserSchema);
-
-console.log("Loaded class")

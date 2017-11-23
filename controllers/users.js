@@ -27,7 +27,6 @@ exports.create = function (body, callback) {
     user.save(function (err) {
         if (err) {
             if (err.code == 11000) {
-                console.log("110000")
                 callback({ error: "bla" }, null)
             }
             callback(err, null);
@@ -51,7 +50,6 @@ exports.authenticate = function (email, password, callback) {
 
         bcrypt.compare(password, user.password, function (err, matches) {
             if (!err && matches) {
-                console.log('The password matches!');
                 // if user is found and password is right create a token
                 user.password = undefined;
                 var token = jwt.sign(user, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$");
@@ -74,10 +72,6 @@ exports.authenticate = function (email, password, callback) {
  */
 
 exports.updateTeam = function (userId, teamId, callback) {
-
-    console.log("userid: " + userId);
-
-    console.log("Loggiing: " + teamId);
 
     User.findById(userId, function (err, user) {
 
@@ -154,10 +148,7 @@ exports.dashboard = function (token, callback) {
 
     nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
         if (err) {
-
-            console.log(err); // Token has expired, has been tampered with, etc
             return callback(err, null)
-
         }
 
         // we got a valid JWT
@@ -219,9 +210,6 @@ exports.migrate = function (req, callback) {
 
                         userObj.save(function (err) {
                             if (err) {
-                                if (err.code == 11000) {
-                                    console.log("email " + user[email] + " in use - 110000")
-                                }
                                 reject(err)
                             } else {
                                 userObj.password = undefined;
