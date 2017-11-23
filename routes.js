@@ -167,6 +167,22 @@ app.put('/users/:id', function (req, res) {
     })
 
 })
+
+
+//  FIND ALL USERS
+
+app.get('/users', function (req, res) {
+    users.findUsers(function (err, users) {
+
+        if (err) {
+            return res.status(404).json({ error: 'No users found' });
+        }
+
+        res.status(200).json(users)
+
+    })
+})
+
 // _____________________________________________________________________________________________________________________
 
 ///////////////////////////////////////
