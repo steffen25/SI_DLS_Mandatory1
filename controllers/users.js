@@ -27,7 +27,7 @@ exports.create = function (body, callback) {
     user.save(function (err) {
         if (err) {
             if (err.code == 11000) {
-                callback({ error: "bla" }, null)
+                callback({ error: "email taken" }, null)
             }
             callback(err, null);
         } else {
@@ -45,7 +45,11 @@ exports.authenticate = function (email, password, callback) {
 
         // Email not found - for security reason response is same as when password is not right
         if (!user) {
-            return callback({ msg: "User not found" }, null);
+            return callback({ message: "User not found" }, null);
+        }
+
+        if (!password) {
+            return callback({ message: "Missing password" }, null);
         }
 
         bcrypt.compare(password, user.password, function (err, matches) {
@@ -62,7 +66,7 @@ exports.authenticate = function (email, password, callback) {
                 return callback(null, data);
             }
             else
-                return callback({ error: "The email or password does not match" }, null)
+                return callback({ message: "The email or password does not match" }, null)
         });
     });
 };

@@ -9,8 +9,9 @@ module.exports.fetchHolidays = function (callback) {
 
 var url = "http://www.kayaposoft.com/enrico/ws/v1.0/index.php?wsdl";
 
+// We could do some tests for the different countries / years etc below if we want to
 var args = {
-    "tns:year":"2017",
+    "tns:year": new Date().getFullYear(),
     "tns:country":"dnk",
     "tns:region":"Denmark"
 };
@@ -25,7 +26,7 @@ soap.createClient(url, function(err, client) {
                 if (err) {
                     console.log('Could not remove holidays') 
                 }
-                console.log('Holidays removed') 
+                //console.log('Holidays removed') 
             });
 
             var holidays = result.return.publicHolidays;

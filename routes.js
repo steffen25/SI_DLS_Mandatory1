@@ -29,18 +29,15 @@ module.exports = function (app) {
 
         users.create(body, function (err, user) {
             if (err) {
-
                 // If the email is already in use.
                 if (err.code == 11000) {
-                    res.status(400).json({ emailTaken: true })
+                    return res.status(400).json({ success: false, error: { message: "This email address is already used", code: err.code } })
                 }
 
-                res.status(500)
-
-                // Successfull create.
-            } else {
-                res.status(201).json({ user: user, success: true });
+                return res.status(500)
             }
+
+            return res.status(201).json({ success: true, data: { user: user }});
         })
     })
 
@@ -93,7 +90,7 @@ module.exports = function (app) {
                 return res;
             }
 
-            return res.status(201).json({ success: true, data: user });
+            return res.status(200).json({ success: true, data: user });
         })
     })
 
@@ -155,6 +152,23 @@ module.exports = function (app) {
 
             var data = {
                 users: users
+            };
+
+            return res.status(200).json({success: true, data: data})
+
+        })
+    })
+
+
+    app.get('/users/:id', function (req, res) {
+        users.findUser(req.params.id, function (err, user) {
+
+            if (err) {
+                return res.status(404).json({ success: false, error: err });
+            }
+
+            var data = {
+                user: user
             };
 
             return res.status(200).json({success: true, data: data})
@@ -310,10 +324,10 @@ module.exports = function (app) {
         holidays.fetchHolidays(function (err, holidays) {
 
             if (err) {
-                return res.status(404).json({ error: 'Error occured while fetching holidays' });
+                return res.status(404).json({ success: false, error: err });
             }
 
-            res.status(200).json(holidays)
+            res.status(200).json({success: true, data: {holidays: holidays}})
 
         })
     })
