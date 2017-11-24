@@ -68,12 +68,12 @@ exports.findCancellations = function (teamId, dates, callback) {
 
         // If no cancellation was found
         if (err) {
-            callback(err, null);
+            return callback(err, null);
         }
 
         // Found user!
         if (cancellations != null) {
-            callback(null, cancellations)
+            return callback(null, cancellations)
         }
     }).sort({date: 1});
 };

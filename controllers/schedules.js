@@ -171,10 +171,16 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
                                 console.log("Error could not fetch cancellations", err)
                                 return;
                             }
-
                             if (cancellations.length > 0) {
-                                for (i = 0; i < cancellations.length; i++) { 
-                                    scheduleDays[i].cancellation = cancellations[i];
+                                for (i = 0; i < scheduleDays.length; i++) { 
+                                    var partsOfStr = scheduleDays[i].date.split(',')[0];
+                                    var myDate = moment(partsOfStr, 'DD-MM-YYYY').add(1, 'hours').toDate();
+                                    for (j = 0; j < cancellations.length; j++) { 
+                                        var cancellationDate = moment(cancellations[j].date)
+                                        if (moment(cancellationDate, 'DD-MM-YYYY').isSame(moment(myDate, 'DD-MM-YYYY'))) {
+                                            scheduleDays[i].cancellation = cancellations[j]
+                                        }
+                                    }
                                 }
                             }
 
