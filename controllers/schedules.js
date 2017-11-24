@@ -164,27 +164,6 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
                         var weekEndDate = weekObj.isoWeekday(5).format()
                         var scheduleDays = schedule.days;
                         var weekDates = enumerateDaysBetweenDates(weekStartDate, weekEndDate)
-                        
-
-                        cancellationController.findCancellations(teamId, weekDates, function(err, cancellations) {
-                            if (err) {
-                                console.log("Error could not fetch cancellations", err)
-                                return;
-                            }
-                            if (cancellations.length > 0) {
-                                for (i = 0; i < scheduleDays.length; i++) { 
-                                    var partsOfStr = scheduleDays[i].date.split(',')[0];
-                                    var myDate = moment(partsOfStr, 'DD-MM-YYYY').add(1, 'hours').toDate();
-                                    for (j = 0; j < cancellations.length; j++) { 
-                                        var cancellationDate = moment(cancellations[j].date)
-                                        if (moment(cancellationDate, 'DD-MM-YYYY').isSame(moment(myDate, 'DD-MM-YYYY'))) {
-                                            scheduleDays[i].cancellation = cancellations[j]
-                                        }
-                                    }
-                                }
-                            }
-
-                        });
 
 
                         var promises = scheduleDays.map(function (item, index) {
@@ -207,10 +186,27 @@ exports.getSchedulesByWeekNumber = function (req, callback) {
 
                         Promise.all(promises)
                             .then(function () {
-                                callback(null, scheduleDays);
+                                cancellationController.findCancellations(teamId, weekDates, function(err, cancellations) {
+                                    if (err) {
+                                        console.log("Error could not fetch cancellations", err)
+                                        return;
+                                    }
+                                    if (cancellations.length > 0) {
+                                        for (i = 0; i < scheduleDays.length; i++) { 
+                                            var partsOfStr = scheduleDays[i].date.split(',')[0];
+                                            var myDate = moment(partsOfStr, 'DD-MM-YYYY').add(1, 'hours').toDate();
+                                            for (j = 0; j < cancellations.length; j++) { 
+                                                var cancellationDate = moment(cancellations[j].date)
+                                                if (moment(cancellationDate, 'DD-MM-YYYY').isSame(moment(myDate, 'DD-MM-YYYY'))) {
+                                                    scheduleDays[i].cancellation = cancellations[j]
+                                                }
+                                            }
+                                        }
+                                    }
+                                    callback(null, scheduleDays);
+                                });
                             })
                             .catch(console.error);
-
                     }
                 });
             }
