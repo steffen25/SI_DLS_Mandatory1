@@ -1,4 +1,9 @@
-require('dotenv').config();
+if (process.env.NODE_ENV === "test") {
+    require('dotenv').config({path: './config/.env.test'})
+} else {
+    require('dotenv').config({path: './config/.env.local'})
+}
+
 var express = require('express');
 const fs       = require('fs');
 const BodyParser = require('body-parser');
