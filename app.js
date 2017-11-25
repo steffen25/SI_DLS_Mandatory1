@@ -1,7 +1,10 @@
 if (process.env.NODE_ENV === "test") {
     require('dotenv').config({path: './config/.env.test'})
 } else {
-    require('dotenv').config({path: './config/.env.local'})
+    if (!process.env.PORT) {
+        // if not heroku
+        require('dotenv').config({path: './config/.env.local'})
+    }
 }
 
 var express = require('express');
