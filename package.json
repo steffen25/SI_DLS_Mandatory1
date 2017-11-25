@@ -4,8 +4,8 @@
   "description": "node",
   "main": "server.js",
   "scripts": {
-    "test": "mocha -t 5000 --recursive --exit",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha -- -t 5000 --recursive --exit",
+    "test": "NODE_ENV=test mocha -t 5000 --recursive --exit",
+    "cover": "NODE_ENV=test istanbul cover node_modules/mocha/bin/_mocha -- -t 5000 --recursive --exit",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {

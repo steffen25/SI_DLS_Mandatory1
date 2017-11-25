@@ -30,3 +30,18 @@ ________________________________________________________
 
 Access the webservice with your browser/Postman. 
 The application runs on Port 4000 and returns data in JSON format. 
+
+
+## Locust load testing
+
+```sh
+cd locust
+docker build -t locust-test .
+# Test scenarios are written in locustfile.py 
+
+# for mac
+docker run --rm -it -p 8089:8089 -e LOCUST_TARGET_HOST='http://docker.for.mac.localhost:4000' locust-test
+
+# Visit the web UI
+http://localhost:8089
+```
