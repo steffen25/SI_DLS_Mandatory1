@@ -109,16 +109,10 @@ exports.findTeams = function (callback) {
     Team.find({}, function (err, teams) {
 
         if (err) {
-            callback(err, null)
-        } else {
-            var teamsMap = {};
-
-            teams.forEach(function (team) {
-                teamsMap[team._id] = team;
-            });
-
-            callback(err, teamsMap)
+            return callback(err, null)
         }
+
+        callback(err, teams)
     });
 };
 
