@@ -6,6 +6,14 @@ const holidays = require('./controllers/holidays');
 const cancellations = require('./controllers/cancellations');
 
 module.exports = function (app) {
+
+    app.get('/loaderio-fc5fada1a8168f47f1a27966c2635d90', function (req, res) {
+
+        res.sendFile(__dirname + '/loader-io-verify.txt')
+
+    })
+
+
     app.get('/users/migrate', function (req, res) {
 
         users.migrate(req, function (error, users) {
@@ -37,7 +45,7 @@ module.exports = function (app) {
                 return res.status(500)
             }
 
-            return res.status(201).json({ success: true, data: { user: user }});
+            return res.status(201).json({ success: true, data: { user: user } });
         })
     })
 
@@ -154,7 +162,7 @@ module.exports = function (app) {
                 users: users
             };
 
-            return res.status(200).json({success: true, data: data})
+            return res.status(200).json({ success: true, data: data })
 
         })
     })
@@ -171,7 +179,7 @@ module.exports = function (app) {
                 user: user
             };
 
-            return res.status(200).json({success: true, data: data})
+            return res.status(200).json({ success: true, data: data })
 
         })
     })
@@ -327,7 +335,7 @@ module.exports = function (app) {
                 return res.status(404).json({ success: false, error: err });
             }
 
-            res.status(200).json({success: true, data: {holidays: holidays}})
+            res.status(200).json({ success: true, data: { holidays: holidays } })
 
         })
     })
