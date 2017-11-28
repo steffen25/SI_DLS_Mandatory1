@@ -11,47 +11,37 @@ const users = require('./users');
 
 // ------- CREATE -----------------//
 
-exports.create = function (token, teamData, callback) {
+exports.create = function (req, callback) {
+    const userObj = req.user._doc
+    var isAdmin = userObj.isAdmin
+    // check if the scheduleId exists
+    if (isAdmin) {
+        // check for required fields
+        var team = new Team({
+            teamName: req.body.teamName,
+            scheduleId: req.body.scheduleId,
+            classRoom: req.body.classRoom
+        });
 
-    // Verify token
-    nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
-        if (err) {
-
-            console.log(err); // Token has expired, has been tampered with, etc
-            callback(err, null)
-
-        } else {
-
-            console.log(verifiedJwt.body._doc); // Get a hold of the user from the decoded token
-            var isAdmin = verifiedJwt.body._doc.isAdmin
-
-            if (isAdmin) {
-
-                var team = new Team({
-                    teamName: teamData.teamName,
-
-                    scheduleId: teamData.scheduleId,
-
-                    classRoom: teamData.classRoom
-                });
-
-                team.save(function (err) {
-                    if (err) {
-                        callback(err, null);
-                    } else {
-                        callback(null, team)
-                    }
-                });
-
+        team.save(function (err) {
+            if (err) {
+                callback(err, null);
             } else {
-                callback(null, true) // TODO: Fix fejl ved ikke admin kald.
+                callback(null, team)
             }
-        }
-    });
+        });
 
+    } else {
+        var err = {
+            msg: "Not admin",
+            code: 10001111
+        }
+
+        callback(null, err)
+    }
 };
 
-exports.updateTeam = function (teamId, scheduleId, callback) {
+exports.updateTeamSchedule = function (teamId, scheduleId, callback) {
 
     Team.findById(teamId, function (err, team) {
 
@@ -102,6 +92,42 @@ exports.findTeam = function (id, callback) {
     });
 };
 
+
+
+exports.updateTeam = function (userId, teamId, callback) {
+
+    User.findById(userId, function (err, user) {
+
+        // If no user was found
+        if (err) {
+            callback(err, null);
+        }
+
+        // Found user!
+        if (user != null) {
+
+            teams.findTeam(teamId, function (err, team) {
+
+                if (team != null) {
+
+                    user.teamId = teamId;
+
+                    user.save(function (err, updatedUser) {
+
+                        if (err) {
+                            callback(err, null)
+                        } else {
+                            callback(null, updatedUser)
+                        }
+                    })
+                }
+            });
+        }
+    });
+};
+
+
+
 // ---------- GET ALL TEAMS -----------//
 
 exports.findTeams = function (callback) {
@@ -141,11 +167,11 @@ exports.deleteTeam = function (teamId, callback) {
                         } else {
 
                             // Successfully deleted users teamId and saved user
-                            Team.remove({_id: teamId}, function (err) {
+                            Team.remove({ _id: teamId }, function (err) {
                                 if (err) {
                                     console.log(err)
                                 } else {
-                                    callback(null, {deletedTeam: true})
+                                    callback(null, { deletedTeam: true })
                                     // removed!
                                 }
                             });

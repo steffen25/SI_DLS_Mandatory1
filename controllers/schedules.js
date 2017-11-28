@@ -111,106 +111,99 @@ exports.findSchedule = function (id, callback) {
 
 exports.getSchedulesByWeekNumber = function (req, callback) {
 
-    token = null;
-
-    if (req.headers['authorization'] !== undefined) {
-        token = req.headers['authorization'].replace(/^JWT\s/, '');
-    } else {
-        token = new Cookies(req).get('access_token').replace(/^JWT\s/, '');
+    const weekNumber = req.params.weekNumber;
+    const weeksInCurrentYear = weeksInYear((new Date()).getFullYear())
+    if (weekNumber <= 0 || weekNumber > weeksInCurrentYear) {
+        return callback({msg: "Invalid week number. Must be between 1 and "+weeksInCurrentYear+""}, null);
     }
 
-    nJwt.verify(token, "Qm/S&U.&Tku'`QQ(BQn8ERmS32na.ad&N7,nBX&[p@vX3XF>B@d>/EQ3a2.Ty.X$", function (err, verifiedJwt) {
-        if (err) {
+    // Passed onto the req obj by the verifytoken middleware
+    const userObj = req.user._doc;
 
-            console.log(err); // Token has expired, has been tampered with, etc
-            return callback(err, null)
+    if (!userObj.hasOwnProperty('teamId')) {
+        return callback({msg: "The user does not have a team."}, null);
+    }
 
+    var teamId = userObj.teamId
+
+    Team.findById(teamId, function (err, team) {
+
+        // If no team was found
+        if (err != null) {
+            return callback(err, null);
         }
 
-        var teamId = verifiedJwt.body._doc.teamId
+        if (team == null) {
+            return callback({ msg: "User doesnt have a team" }, null)
+        }
 
-        Team.findById(teamId, function (err, team) {
+        // Found team!
+        if (team != null) {
+            Schedule.findById(team.scheduleId, function (err, schedule) {
+                // If no schedule was found
+                if (err != null) {
+                    return callback(err, null);
+                }
 
-            // If no team was found
-            if (err != null) {
-                return callback(err, null);
-            }
+                if (schedule == null) {
+                    return callback({ msg: "Team doesnt have a schedule id" }, null)
+                }
 
-            if (team == null) {
-                return callback({ msg: "User doesnt have a team" }, null)
-            }
+                // Found schedule!
+                if (schedule != null) {
+                    var week = weekNumber;
 
-            // Found team!
-            if (team != null) {
-                Schedule.findById(team.scheduleId, function (err, schedule) {
-                    // If no schedule was found
-                    if (err != null) {
-                        return callback(err, null);
-                    }
-
-                    if (schedule == null) {
-                        return callback({ msg: "Team doesnt have a schedule id" }, null)
-                    }
-
-                    // Found schedule!
-                    if (schedule != null) {
-                        var week = moment().format('W');
-                        if (req.params.weekNumber) {
-                            week = req.params.weekNumber;
-                        }
-
-                        var weekObj = moment().startOf('isoWeek').week(week);
-                        var weekStartDate = weekObj.isoWeekday(1).format();
-                        var weekEndDate = weekObj.isoWeekday(5).format()
-                        var scheduleDays = schedule.days;
-                        var weekDates = enumerateDaysBetweenDates(weekStartDate, weekEndDate)
+                    var weekObj = moment().startOf('isoWeek').week(week);
+                    var weekStartDate = weekObj.isoWeekday(1).format();
+                    var weekEndDate = weekObj.isoWeekday(5).format()
+                    var scheduleDays = schedule.days;
+                    var weekDates = enumerateDaysBetweenDates(weekStartDate, weekEndDate)
 
 
-                        var promises = scheduleDays.map(function (item, index) {
-                            return new Promise(function (resolve, reject) {
-                                var day = weekObj.isoWeekday(index + 1)
-                                const dayFormatted = day.format("DD-MM-YYYY, dddd")
+                    var promises = scheduleDays.map(function (item, index) {
+                        return new Promise(function (resolve, reject) {
+                            var day = weekObj.isoWeekday(index + 1)
+                            const dayFormatted = day.format("DD-MM-YYYY, dddd")
 
-                                item.date = dayFormatted;
+                            item.date = dayFormatted;
 
-                                // Check if a given day is a holiday
-                                holidayController.findHoliday(day.format('YYYY-MM-DD'), function (err, holiday) {
-                                    if (holiday !== null) {
-                                        item.holiday = holiday
-                                        resolve();
-                                    }
+                            // Check if a given day is a holiday
+                            holidayController.findHoliday(day.format('YYYY-MM-DD'), function (err, holiday) {
+                                if (holiday !== null) {
+                                    item.holiday = holiday
                                     resolve();
-                                })
-                            });
+                                }
+                                resolve();
+                            })
                         });
+                    });
 
-                        Promise.all(promises)
-                            .then(function () {
-                                cancellationController.findCancellations(teamId, weekDates, function(err, cancellations) {
-                                    if (err) {
-                                        console.log("Error could not fetch cancellations", err)
-                                        return;
-                                    }
-                                    if (cancellations.length > 0) {
-                                        for (i = 0; i < scheduleDays.length; i++) { 
-                                            var partsOfStr = scheduleDays[i].date.split(',')[0];
-                                            var myDate = moment(partsOfStr, 'DD-MM-YYYY').add(1, 'hours').toDate();
-                                            for (j = 0; j < cancellations.length; j++) { 
-                                                var cancellationDate = moment(cancellations[j].date)
-                                                if (moment(cancellationDate, 'DD-MM-YYYY').isSame(moment(myDate, 'DD-MM-YYYY'))) {
-                                                    scheduleDays[i].cancellation = cancellations[j]
-                                                }
+                    Promise.all(promises)
+                        .then(function () {
+                            cancellationController.findCancellations(teamId, weekDates, function (err, cancellations) {
+                                if (err) {
+                                    console.log("Error could not fetch cancellations", err)
+                                    return;
+                                }
+                                if (cancellations.length > 0) {
+                                    for (i = 0; i < scheduleDays.length; i++) {
+                                        var partsOfStr = scheduleDays[i].date.split(',')[0];
+                                        var myDate = moment(partsOfStr, 'DD-MM-YYYY').add(1, 'hours').toDate();
+                                        for (j = 0; j < cancellations.length; j++) {
+                                            var cancellationDate = moment(cancellations[j].date)
+                                            if (moment(cancellationDate, 'DD-MM-YYYY').isSame(moment(myDate, 'DD-MM-YYYY'))) {
+                                                scheduleDays[i].cancellation = cancellations[j]
                                             }
                                         }
                                     }
-                                    callback(null, scheduleDays);
-                                });
-                            })
-                            .catch(console.error);
-                    }
-                });
-            }
-        });
+                                }
+                                callback(null, scheduleDays);
+                            });
+                        })
+                        .catch(console.error);
+                }
+            });
+        }
     });
 };
 
@@ -285,7 +278,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                         if (today.isSame(weekObj.weekday(requestedDay), 'day')) {
 
 
-                            cancellationController.findCancellations(teamId, [day.add(1, 'hours').toISOString()], function(err, cancellations) {
+                            cancellationController.findCancellations(teamId, [day.add(1, 'hours').toISOString()], function (err, cancellations) {
                                 if (err) {
                                     console.log("Error could not fetch cancellations", err)
                                     return;
@@ -294,11 +287,11 @@ exports.getScheduleByWeekday = function (req, callback) {
                                 if (cancellations.length > 0) {
                                     scheduleDays[requestedDay - 1].cancellation = cancellations[0]
                                 }
-    
+
                             });
 
 
-                            
+
                             var getWeather = new Promise((resolve, reject) => {
                                 weatherController.getCurrentWeather(function (err, weatherData) {
                                     if (err) {
@@ -339,7 +332,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                                 .catch(console.error);
                         } else {
 
-                            cancellationController.findCancellations(teamId, [day.add(1, 'hours').toISOString()], function(err, cancellations) {
+                            cancellationController.findCancellations(teamId, [day.add(1, 'hours').toISOString()], function (err, cancellations) {
                                 if (err) {
                                     console.log("Error could not fetch cancellations", err)
                                     return;
@@ -348,7 +341,7 @@ exports.getScheduleByWeekday = function (req, callback) {
                                 if (cancellations.length > 0) {
                                     scheduleDays[requestedDay - 1].cancellation = cancellations[0]
                                 }
-    
+
                             });
 
                             var checkForHoliday = new Promise((resolve, reject) => {
@@ -386,3 +379,24 @@ function enumerateDaysBetweenDates(startDate, endDate) {
     }
     return dates;
 };
+
+function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(+d);
+    d.setHours(0,0,0);
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+    // Get first day of year
+    var yearStart = new Date(d.getFullYear(),0,1);
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7)
+    // Return array of year and week number
+    return [d.getFullYear(), weekNo];
+}
+
+function weeksInYear(year) {
+    var d = new Date(year, 11, 31);
+    var week = getWeekNumber(d)[1];
+    return week == 1 ? getWeekNumber(d.setDate(24))[1] : week;
+}

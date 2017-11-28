@@ -13,6 +13,8 @@ var request = require('request');
  */
 exports.create = function (body, callback) {
 
+    // check if the teamId exists
+
     var user = new User({
         password: body.password,
         email: body.email,
@@ -60,7 +62,7 @@ exports.authenticate = function (email, password, callback) {
 
                 // return the information including token as JSON
                 var data = {
-                    token: 'JWT ' + token,
+                    token: token,
                     user: user
                 }
                 return callback(null, data);
@@ -68,42 +70,6 @@ exports.authenticate = function (email, password, callback) {
             else
                 return callback({ message: "The email or password does not match" }, null)
         });
-    });
-};
-
-/**
- * Edit a users team
- */
-
-exports.updateTeam = function (userId, teamId, callback) {
-
-    User.findById(userId, function (err, user) {
-
-        // If no user was found
-        if (err) {
-            callback(err, null);
-        }
-
-        // Found user!
-        if (user != null) {
-
-            teams.findTeam(teamId, function (err, team) {
-
-                if (team != null) {
-
-                    user.teamId = teamId;
-
-                    user.save(function (err, updatedUser) {
-
-                        if (err) {
-                            callback(err, null)
-                        } else {
-                            callback(null, updatedUser)
-                        }
-                    })
-                }
-            });
-        }
     });
 };
 

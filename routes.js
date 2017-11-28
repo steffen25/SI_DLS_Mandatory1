@@ -4,6 +4,7 @@ const teams = require('./controllers/teams');
 const schedules = require('./controllers/schedules');
 const holidays = require('./controllers/holidays');
 const cancellations = require('./controllers/cancellations');
+const verifyToken = require('./util/verifytoken');
 
 module.exports = function (app) {
 
@@ -114,7 +115,7 @@ module.exports = function (app) {
             return res;
         }
 
-        token = token.replace(/^JWT\s/, '');
+        //token = token.replace(/^JWT\s/, '');
 
         users.dashboard(token, function (err, user) {
             if (err != null) {
@@ -137,7 +138,7 @@ module.exports = function (app) {
 
         var teamId = req.body.teamId;
 
-        users.updateTeam(userId, teamId, function (err, updatedUser) {
+        teams.updateTeam(userId, teamId, function (err, updatedUser) {
 
             if (err) {
                 res.status(500).json({ "Internal Server error updating user": err })
@@ -200,10 +201,10 @@ module.exports = function (app) {
 
     })
 
-    app.get('/schedules/week/:weekNumber?', function (req, res) {
+    app.get('/schedules/week/:weekNumber?', verifyToken, function (req, res) {
         schedules.getSchedulesByWeekNumber(req, function (err, schedules) {
             if (err != null) {
-                return res.status(400).send({ errors: err })
+                return res.status(400).send({success: false, error: err })
             }
 
             return res.status(200).json(schedules)
@@ -246,10 +247,10 @@ module.exports = function (app) {
         teams.findTeams(function (err, teams) {
 
             if (err) {
-                return res.status(404).json({ error: 'Teams not found' });
+                return res.status(404).json({success: false, error: 'Teams not found' });
             }
 
-            res.status(200).json(teams)
+            res.status(200).json({success: true, data: {teams: teams} })
 
         })
     })
@@ -270,21 +271,18 @@ module.exports = function (app) {
     })
 
     // Create team
-    app.post('/teams/', function (req, res) {
-
-        var token = req.headers['authorization'].replace(/^JWT\s/, '');
-        var teamData = req.body
-
-        teams.create(token, teamData, function (err, team) {
-
+    app.post('/teams', verifyToken, function (req, res) {
+        teams.create(req, function (err, team) {
             if (err) {
-                // Not authorized / error creating team / Duplicate teamname // TODO: Send specific fejl alt afhængigt af hvad går galt.
-                return res.status(401).json({ "Authorized": false });
-            } else {
+                // No admin
+                if (err.code === 10001111) {
+                    return res.status(401).json({ success: false, error: err });
+                }
 
-                // Succesfully created team
-                return res.status(201).json({ "Created team": true, "Team": team });
-            }
+                return res.status(400).json({ success: false, error: err });
+            } 
+            
+            return res.status(201).json({ success: true, data: team });
         })
 
     })
@@ -296,7 +294,7 @@ module.exports = function (app) {
 
         var scheduleId = req.body.scheduleId;
 
-        teams.updateTeam(teamId, scheduleId, function (err, updatedTeam) {
+        teams.updateTeamSchedule(teamId, scheduleId, function (err, updatedTeam) {
 
             if (err) {
                 res.status(500).json({ "Internal Server error updating team": err })
@@ -351,7 +349,7 @@ module.exports = function (app) {
     // Create cancellation
     app.post('/cancellations', function (req, res) {
 
-        var token = req.headers['authorization'].replace(/^JWT\s/, '');
+        var token = req.headers['authorization'];
         var cancellationData = req.body
 
 

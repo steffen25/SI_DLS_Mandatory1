@@ -9,7 +9,7 @@ const expect = chai.expect
 const assert = chai.assert
 chai.use(chaiHttp);
 
-app.listen(process.env.NODE_PORT || 4000);
+api.listen(process.env.NODE_PORT || 4000);
 
 describe('/GET users', () => {
     // Clear all users from the test database
@@ -412,6 +412,45 @@ describe('/POST login', () => {
     });
 });
 
+
+describe('/POST login', () => {
+    it('it should return a 401 with a error message if you login with invalid credentials', (done) => {
+        chai.request(api)
+        .post('/login')
+        .set('content-type', 'application/json')
+        .send({email: "testlogin@kea.dk", password: "123456789"})
+        .end((err, res) => {
+            res.should.be.json;
+            res.should.have.status(401);
+            res.body.should.have.property('success')
+            expect(res.body.success).to.be.false;
+            res.body.should.have.property('error')
+            res.body.error.should.have.property('message')
+            res.body.error.message.should.be.a('string');
+            done();
+        });
+    });
+});
+
+
+describe('/POST login', () => {
+    it('it should return an error if you login with an email address that doesnt exists', (done) => {
+        chai.request(api)
+        .post('/login')
+        .set('content-type', 'application/json')
+        .send({email: "invalid@kea.dk", password: "123456"})
+        .end((err, res) => {
+            res.should.be.json;
+            res.should.have.status(401);
+            res.body.should.have.property('success')
+            expect(res.body.success).to.be.false;
+            res.body.should.have.property('error')
+            res.body.error.should.have.property('message')
+            res.body.error.message.should.be.a('string');
+            done();
+        });
+    });
+});
 
 describe('/POST login', () => {
     it('it should return a 401 with a error message if you login with invalid credentials', (done) => {
