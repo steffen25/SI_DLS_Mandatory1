@@ -221,7 +221,7 @@ exports.getScheduleByWeekday = function (req, callback) {
         }
 
         var teamId = verifiedJwt.body._doc.teamId
-        console.log(teamId)
+
         Team.findById(teamId, function (err, team) {
 
             // If no team was found

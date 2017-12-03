@@ -141,10 +141,10 @@ module.exports = function (app) {
         teams.updateTeam(userId, teamId, function (err, updatedUser) {
 
             if (err) {
-                res.status(500).json({ "Internal Server error updating user": err })
-            } else {
-                res.status(201).json({ "succes": true, data: updatedUser })
+                return res.status(400).json({ "Internal Server error updating user": err })
             }
+
+            return res.status(200).json({ "succes": true, data: updatedUser })
         })
 
     })
@@ -207,7 +207,7 @@ module.exports = function (app) {
     app.get('/schedules/week/:weekNumber?', verifyToken, function (req, res) {
         schedules.getSchedulesByWeekNumber(req, function (err, schedules) {
             if (err != null) {
-                return res.status(400).send({success: false, error: err })
+                return res.status(400).send({ success: false, error: err })
             }
 
             return res.status(200).json(schedules)
@@ -215,7 +215,7 @@ module.exports = function (app) {
 
     })
 
-    app.get('/schedules/week/:weekNumber?/day/:day?', function (req, res) {
+    app.get('/schedules/week/:weekNumber?/day/:day?', verifyToken, function (req, res) {
 
 
         schedules.getScheduleByWeekday(req, function (err, schedule) {
@@ -250,10 +250,10 @@ module.exports = function (app) {
         teams.findTeams(function (err, teams) {
 
             if (err) {
-                return res.status(404).json({success: false, error: 'Teams not found' });
+                return res.status(404).json({ success: false, error: 'Teams not found' });
             }
 
-            res.status(200).json({success: true, data: {teams: teams} })
+            res.status(200).json({ success: true, data: { teams: teams } })
 
         })
     })
@@ -283,8 +283,8 @@ module.exports = function (app) {
                 }
 
                 return res.status(400).json({ success: false, error: err });
-            } 
-            
+            }
+
             return res.status(201).json({ success: true, data: team });
         })
 
@@ -300,9 +300,9 @@ module.exports = function (app) {
         teams.updateTeamSchedule(teamId, scheduleId, function (err, updatedTeam) {
 
             if (err) {
-                res.status(500).json({ "Internal Server error updating team": err })
+                res.status(400).json({ "Internal Server error updating team": err })
             } else {
-                res.status(201).json({ "succes": true, data: updatedTeam })
+                res.status(200).json({ "succes": true, data: updatedTeam })
             }
         })
 

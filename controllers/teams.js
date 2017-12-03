@@ -86,7 +86,7 @@ exports.findTeam = function (id, callback) {
         }
 
         if (!team) {
-            return callback({error: "Could not find team"}, null)
+            return callback({ error: "Could not find team" }, null)
         }
 
         callback(null, team)
@@ -101,27 +101,33 @@ exports.updateTeam = function (userId, teamId, callback) {
 
         // If no user was found
         if (err) {
-            callback(err, null);
+            return callback(err, null);
         }
 
         // Found user!
         if (user != null) {
 
-            teams.findTeam(teamId, function (err, team) {
 
-                if (team != null) {
+            Team.findById(teamId, function (err, team) {
 
-                    user.teamId = teamId;
-
-                    user.save(function (err, updatedUser) {
-
-                        if (err) {
-                            callback(err, null)
-                        } else {
-                            callback(null, updatedUser)
-                        }
-                    })
+                // If no team was found
+                if (err) {
+                    return callback(err, null);
                 }
+
+                if (!team) {
+                    return callback({ error: "Could not find team" }, null)
+                }
+
+                user.teamId = teamId;
+
+                user.save(function (err, updatedUser) {
+                    if (err) {
+                        return callback(err, null)
+                    } else {
+                        return callback(null, updatedUser)
+                    }
+                })
             });
         }
     });
