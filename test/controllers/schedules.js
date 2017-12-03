@@ -358,7 +358,7 @@ describe('/GET schedules for week for new user with a new team and a new schedul
                 done();
             });
     });
-    
+
     var teamId;
     before(function (done) {
         var team = {
@@ -393,16 +393,16 @@ describe('/GET schedules for week for new user with a new team and a new schedul
     // assign the user the team
     before(function (done) {
         chai.request(api)
-        .put('/users/'+userId)
-        .set('Authorization', token)
-        .set('content-type', 'application/json')
-        .send({"teamId": teamId})
-        .end((err, res) => {
-            res.should.be.json;
-            res.should.have.status(200);
-            expect(res.body.data.teamId).to.equal(teamId);
-            done();
-        });
+            .put('/users/' + userId)
+            .set('Authorization', token)
+            .set('content-type', 'application/json')
+            .send({ "teamId": teamId })
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(200);
+                expect(res.body.data.teamId).to.equal(teamId);
+                done();
+            });
     });
 
     // login again to get the new assigned team Id in the token
@@ -423,30 +423,30 @@ describe('/GET schedules for week for new user with a new team and a new schedul
 
     it('it should return 200 with the schedules we have defined in the before clause', (done) => {
         chai.request(api)
-        .get('/schedules/week/47')
-        .set('Authorization', token)
-        .end((err, res) => {
-            res.should.be.json;
-            res.should.have.status(200);
-            res.body.should.be.a('array');
-            res.body.length.should.be.eql(5);
-            expect(res.body[0]).to.have.property('monday');
-            expect(res.body[0]).to.have.property('date');
-            expect(res.body[0].monday).to.equal("System testing");
-            expect(res.body[1]).to.have.property('tuesday');
-            expect(res.body[1]).to.have.property('date');
-            expect(res.body[1].tuesday).to.equal("Database");
-            expect(res.body[2]).to.have.property('wednesday');
-            expect(res.body[2]).to.have.property('date');
-            expect(res.body[2].wednesday).to.equal("Software design");
-            expect(res.body[3]).to.have.property('thursday');
-            expect(res.body[3]).to.have.property('date');
-            expect(res.body[3].thursday).to.equal("Software construction");
-            expect(res.body[4]).to.have.property('friday');
-            expect(res.body[4]).to.have.property('date');
-            expect(res.body[4].friday).to.equal("Project work");
-            done();
-        });
+            .get('/schedules/week/47')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(200);
+                res.body.should.be.a('array');
+                res.body.length.should.be.eql(5);
+                expect(res.body[0]).to.have.property('monday');
+                expect(res.body[0]).to.have.property('date');
+                expect(res.body[0].monday).to.equal("System testing");
+                expect(res.body[1]).to.have.property('tuesday');
+                expect(res.body[1]).to.have.property('date');
+                expect(res.body[1].tuesday).to.equal("Database");
+                expect(res.body[2]).to.have.property('wednesday');
+                expect(res.body[2]).to.have.property('date');
+                expect(res.body[2].wednesday).to.equal("Software design");
+                expect(res.body[3]).to.have.property('thursday');
+                expect(res.body[3]).to.have.property('date');
+                expect(res.body[3].thursday).to.equal("Software construction");
+                expect(res.body[4]).to.have.property('friday');
+                expect(res.body[4]).to.have.property('date');
+                expect(res.body[4].friday).to.equal("Project work");
+                done();
+            });
     });
 });
 
@@ -470,21 +470,21 @@ describe('/GET schedules for day in a week', () => {
 
     it('it should return 200 with the schedule for monday(1 day) we have defined in the previous test', (done) => {
         chai.request(api)
-        .get('/schedules/week/47/day/1')
-        .set('Authorization', token)
-        .end((err, res) => {
-            res.should.be.json;
-            res.should.have.status(200);
-            res.body.should.be.an('object');
-            expect(res.body).to.have.property('monday');
-            expect(res.body).to.have.property('date');
-            expect(res.body.monday).to.equal("System testing");
-            done();
-        });
+            .get('/schedules/week/47/day/1')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                expect(res.body).to.have.property('monday');
+                expect(res.body).to.have.property('date');
+                expect(res.body.monday).to.equal("System testing");
+                done();
+            });
     });
 });
 
-describe('/GET schedules for monday in a week', () => {
+describe('/GET schedules for a invalid day in a valid week', () => {
     var token;
     before(function (done) {
         chai.request(api)
@@ -499,17 +499,42 @@ describe('/GET schedules for monday in a week', () => {
             });
     });
 
-
-
-    it('it should return 400 with the schedules we have defined in the before clause', (done) => {
+    it('it should return 400 with no schedules', (done) => {
         chai.request(api)
-        .get('/schedules/week/47/day/6')
-        .set('Authorization', token)
-        .end((err, res) => {
-            res.should.be.json;
-            res.should.have.status(400);
-            done();
-        });
+            .get('/schedules/week/47/day/6')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(400);
+                done();
+            });
+    });
+});
+
+describe('/GET schedules for a invalid day in a invalid week', () => {
+    var token;
+    before(function (done) {
+        chai.request(api)
+            .post('/login')
+            .set('content-type', 'application/json')
+            .send({ email: "newtestuser444@kea.dk", password: "123456" })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.data.should.have.property('token')
+                token = res.body.data.token;
+                done();
+            });
+    });
+
+    it('it should return 400 with no schedules', (done) => {
+        chai.request(api)
+            .get('/schedules/week/80/day/7')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(400);
+                done();
+            });
     });
 });
 
@@ -528,21 +553,19 @@ describe('/GET schedules for tuesday in a week', () => {
             });
     });
 
-
-
-    it('it should return 200 with the schedule for monday(1 day) we have defined in the previous test', (done) => {
+    it('it should return 200 with the schedule for tuesday we have defined in the previous test', (done) => {
         chai.request(api)
-        .get('/schedules/week/47/day/2')
-        .set('Authorization', token)
-        .end((err, res) => {
-            res.should.be.json;
-            res.should.have.status(200);
-            res.body.should.be.an('object');
-            expect(res.body).to.have.property('tuesday');
-            expect(res.body).to.have.property('date');
-            expect(res.body.tuesday).to.equal("Database");
-            done();
-        });
+            .get('/schedules/week/47/day/2')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                expect(res.body).to.have.property('tuesday');
+                expect(res.body).to.have.property('date');
+                expect(res.body.tuesday).to.equal("Database");
+                done();
+            });
     });
 });
 
@@ -561,20 +584,18 @@ describe('/GET schedules for friday in a week', () => {
             });
     });
 
-
-
-    it('it should return 200 with the schedule for monday(1 day) we have defined in the previous test', (done) => {
+    it('it should return 200 with the schedule for friday we have defined in the previous test', (done) => {
         chai.request(api)
-        .get('/schedules/week/47/day/5')
-        .set('Authorization', token)
-        .end((err, res) => {
-            res.should.be.json;
-            res.should.have.status(200);
-            res.body.should.be.an('object');
-            expect(res.body).to.have.property('friday');
-            expect(res.body).to.have.property('date');
-            expect(res.body.friday).to.equal("Project work");
-            done();
-        });
+            .get('/schedules/week/47/day/5')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.be.json;
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                expect(res.body).to.have.property('friday');
+                expect(res.body).to.have.property('date');
+                expect(res.body.friday).to.equal("Project work");
+                done();
+            });
     });
 });

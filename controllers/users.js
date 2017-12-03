@@ -44,7 +44,6 @@ exports.create = function (body, callback) {
     });
 
     if (body.teamId !== null) {
-        console.log("hej")
         // see if the team exists
         teams.findTeam(body.teamId, function (err, team) {
             if (err) {
