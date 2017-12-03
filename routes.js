@@ -194,9 +194,12 @@ module.exports = function (app) {
 
         schedules.createSchedule(req, function (err, schedule) {
             if (err != null) {
-                return res.status(400).send({ errors: err })
+                if (err.code === 401) {
+                    return res.status(401).send({ error: err })
+                }
+                return res.status(400).send({ error: err })
             }
-            return res.status(200).json(schedule)
+            return res.status(201).json(schedule)
         })
 
     })

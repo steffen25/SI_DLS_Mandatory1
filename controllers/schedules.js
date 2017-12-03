@@ -25,12 +25,7 @@ module.exports.createSchedule = function (req, callback) {
         var isAdmin = verifiedJwt.body._doc.isAdmin
 
         if (!isAdmin) {
-            var err = {
-                error: {
-                    msg: "Unauthorized"
-                }
-            }
-            return callback(err)
+            return callback({msg: "Unauthorized", code: 401})
 
         }
 
@@ -82,9 +77,9 @@ module.exports.createSchedule = function (req, callback) {
 
         schedule.save(function (err) {
             if (err) {
-                callback(err, null);
+                return callback(err, null);
             } else {
-                callback(null, schedule)
+                return callback(null, schedule)
             }
         });
 
