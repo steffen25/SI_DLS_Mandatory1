@@ -82,13 +82,14 @@ exports.findTeam = function (id, callback) {
 
         // If no team was found
         if (err) {
-            callback(err, null);
+            return callback(err, null);
         }
 
-        // Found team!
-        if (team != null) {
-            callback(null, team)
+        if (!team) {
+            return callback({error: "Could not find team"}, null)
         }
+
+        callback(null, team)
     });
 };
 

@@ -88,6 +88,85 @@ describe('/POST user', () => {
     });
 });
 
+describe('/POST user', () => {
+    
+        it('it should not create a user since no password is defined in the post body', (done) => {
+            var user = {
+                email: "testuser@kea.dk",
+                firstName: "John",
+                lastName: "Doe",
+                address: "Street 2",
+                phone: "12345678",
+                teamId: null,
+                isAdmin: true
+            }
+    
+            chai.request(api)
+                .post('/users')
+                .set('content-type', 'application/json')
+                .send(user)
+                .end((err, res) => {
+                    res.should.be.json;
+                    res.should.have.status(400);
+                    done();
+                });
+        });
+});
+
+
+describe('/POST user', () => {
+    
+        it('it should not create a user since the password is below 6 characters', (done) => {
+            var user = {
+                password: "12345",
+                email: "testuser@kea.dk",
+                firstName: "John",
+                lastName: "Doe",
+                address: "Street 2",
+                phone: "12345678",
+                teamId: null,
+                isAdmin: true
+            }
+    
+            chai.request(api)
+                .post('/users')
+                .set('content-type', 'application/json')
+                .send(user)
+                .end((err, res) => {
+                    res.should.be.json;
+                    res.should.have.status(400);
+                    done();
+                });
+        });
+});
+
+
+describe('/POST user', () => {
+    
+        it('it should not create a user since the email is not a valid email address', (done) => {
+            var user = {
+                password: "123456",
+                email: "testuserkea.dk",
+                firstName: "John",
+                lastName: "Doe",
+                address: "Street 2",
+                phone: "12345678",
+                teamId: null,
+                isAdmin: true
+            }
+    
+            chai.request(api)
+                .post('/users')
+                .set('content-type', 'application/json')
+                .send(user)
+                .end((err, res) => {
+                    res.should.be.json;
+                    res.should.have.status(400);
+                    done();
+                });
+        });
+});
+
 
 describe('/POST user with a already used email address', () => {
 
@@ -123,6 +202,32 @@ describe('/POST user with a already used email address', () => {
                 done();
             });
     });
+});
+
+describe('/POST user', () => {
+    
+        it('it should not create a user since the teamId does not exists', (done) => {
+            var user = {
+                password: "1234567",
+                email: "testuser9@kea.dk",
+                firstName: "John",
+                lastName: "Doe",
+                address: "Street 2",
+                phone: "12345678",
+                teamId: "-1",
+                isAdmin: true
+            }
+    
+            chai.request(api)
+                .post('/users')
+                .set('content-type', 'application/json')
+                .send(user)
+                .end((err, res) => {
+                    res.should.be.json;
+                    res.should.have.status(400);
+                    done();
+                });
+        });
 });
 
 

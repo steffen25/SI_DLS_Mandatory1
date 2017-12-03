@@ -13,7 +13,24 @@ var request = require('request');
  */
 exports.create = function (body, callback) {
 
-    // check if the teamId exists
+    if (!body.email) {
+        return callback({ msg: "You must provide a email address" }, null)
+    } else {
+        // validate email
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        validEmail = re.test(body.email);
+        if (!validEmail) {
+            return callback({ msg: "You must provide a valid email address" }, null)
+        }
+    }
+   
+    if (!body.password) {
+        return callback({ msg: "You must provide a password" }, null)
+    } else {
+        if (body.password.length < 6) {
+            return callback({ msg: "You must provide a password with a minimum of 6 characters" }, null)
+        }
+    }
 
     var user = new User({
         password: body.password,
@@ -22,21 +39,47 @@ exports.create = function (body, callback) {
         lastName: body.lastName,
         address: body.address,
         phone: body.phone,
-        teamId: body.teamId,
         isAdmin: body.isAdmin,
+        teamId: body.teamId
     });
 
-    user.save(function (err) {
-        if (err) {
-            if (err.code == 11000) {
-                callback({ error: "email taken" }, null)
+    if (body.teamId !== null) {
+        console.log("hej")
+        // see if the team exists
+        teams.findTeam(body.teamId, function (err, team) {
+            if (err) {
+                return callback({ msg: "Could not fetch team." }, null)
             }
-            callback(err, null);
-        } else {
-            user.password = undefined;
-            callback(null, user)
-        }
-    });
+            if (!team) {
+                return callback({ msg: "The team does not exists" }, null)
+            }
+
+            user.teamId = team._id
+            user.save(function (err) {
+                if (err) {
+                    if (err.code == 11000) {
+                        return callback({ msg: "email taken", code: 11000 }, null)
+                    }
+                    return callback(err, null);
+                } else {
+                    user.password = undefined;
+                    return callback(null, user)
+                }
+            });
+        });
+    } else {
+        user.save(function (err) {
+            if (err) {
+                if (err.code == 11000) {
+                    return callback({ msg: "email taken", code: 11000 }, null)
+                }
+                return callback(err, null);
+            } else {
+                user.password = undefined;
+                return callback(null, user)
+            }
+        });
+    }
 };
 
 exports.authenticate = function (email, password, callback) {

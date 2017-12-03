@@ -43,7 +43,7 @@ module.exports = function (app) {
                     return res.status(400).json({ success: false, error: { message: "This email address is already used", code: err.code } })
                 }
 
-                return res.status(500)
+                return res.status(400).json({ success: false, error: err })
             }
 
             return res.status(201).json({ success: true, data: { user: user } });
